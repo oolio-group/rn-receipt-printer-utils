@@ -232,8 +232,8 @@ public class NetPrinterAdapter implements PrinterAdapter {
 
         final byte[] rawData = rawBase64Data;
         final Socket socket = this.mSocket;
-        Log.e(LOG_TAG, "bello ::  int start to print raw data ", new String(rawBase64Data));
-        Log.e(LOG_TAG, "bello ::  int start to print raw data ", new String(rawData));
+        String str = new String(rawBase64Data);
+        Log.e(LOG_TAG, "bello ::  int start to print raw data ", str);
 
         new Thread(new Runnable() {
             @Override
