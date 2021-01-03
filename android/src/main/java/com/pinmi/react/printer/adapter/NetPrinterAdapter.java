@@ -197,21 +197,54 @@ public class NetPrinterAdapter implements PrinterAdapter {
             return;
         }
 
-        Log.v(LOG_TAG, "start to print raw data ");
+        Log.v(LOG_TAG, "bello :: start to print raw data ");
 
         final String rawData = rawBase64Data;
         final Socket socket = this.mSocket;
-        Log.v(LOG_TAG, "start to print raw data " + rawBase64Data);
+        Log.e(LOG_TAG, "bello ::  start to print raw data " + rawBase64Data);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     byte[] bytes = Base64.decode(rawData, Base64.DEFAULT);
+
                     OutputStream printerOutputStream = socket.getOutputStream();
                     printerOutputStream.write(bytes, 0, bytes.length);
                     printerOutputStream.flush();
                 } catch (IOException e) {
-                    Log.e(LOG_TAG, "failed to print data" + rawData);
+                    Log.e(LOG_TAG, "bello :: failed to print data" + rawData);
+                    Log.e(LOG_TAG, "bello :: cause to print data" + e.toString());
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
+    @Override
+    public void printRawData(bytes[] rawBase64Data, Callback errorCallback) {
+        if (this.mSocket == null) {
+            errorCallback.invoke("bluetooth connection is not built, may be you forgot to connectPrinter");
+            return;
+        }
+
+        Log.v(LOG_TAG, "bello :: int start to print raw data ");
+
+        // final String rawData = rawBase64Data;
+        final Socket socket = this.mSocket;
+        Log.e(LOG_TAG, "bello ::  int start to print raw data " + rawBase64Data);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    byte[] bytes = rawBase64Data;
+
+                    OutputStream printerOutputStream = socket.getOutputStream();
+                    printerOutputStream.write(bytes, 0, bytes.length);
+                    printerOutputStream.flush();
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, "bello :: int failed to print data" + rawData);
+                    Log.e(LOG_TAG, "bello :: int cause to print data" + e.toString());
                     e.printStackTrace();
                 }
             }

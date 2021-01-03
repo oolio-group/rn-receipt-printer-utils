@@ -191,6 +191,7 @@ export var NetPrinter = {
             RNNetPrinter.printRawData(processedText.text, processedText.opts, function (error) { return console.warn(error); });
         }
         else {
+            console.log('bello rn ----- incoming data ', text);
             RNNetPrinter.printRawData(text, function (error) {
                 return console.warn(error);
             });
