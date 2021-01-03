@@ -35,7 +35,7 @@ public interface RNPrinterModule {
     public void printRawData(String base64Data, Callback errorCallback) ;
 
     @ReactMethod
-    public default void printByteData(byte[] base64Data, Callback errorCallback) ;
+    public void printByteData(byte[] base64Data, Callback errorCallback) ;
 
 }
 

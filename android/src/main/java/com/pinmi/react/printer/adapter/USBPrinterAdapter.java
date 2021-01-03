@@ -222,5 +222,8 @@ public class USBPrinterAdapter implements PrinterAdapter {
         }
     }
 
+    @Override
+    public void printByteData(byte[] rawBase64Data, Callback errorCallback) {
+    }
 
 }
