@@ -232,7 +232,9 @@ public class NetPrinterAdapter implements PrinterAdapter {
 
         final byte[] rawData = rawBase64Data;
         final Socket socket = this.mSocket;
-        Log.e(LOG_TAG, "bello ::  int start to print raw data " + new String(rawBase64Data));
+        Log.e(LOG_TAG, "bello ::  int start to print raw data ", new String(rawBase64Data));
+        Log.e(LOG_TAG, "bello ::  int start to print raw data ", new String(rawData));
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -243,7 +245,7 @@ public class NetPrinterAdapter implements PrinterAdapter {
                     printerOutputStream.write(bytes, 0, bytes.length);
                     printerOutputStream.flush();
                 } catch (IOException e) {
-                    Log.e(LOG_TAG, "bello :: int failed to print data" + new String(rawData));
+                    Log.e(LOG_TAG, "bello :: int failed to print data");
                     Log.e(LOG_TAG, "bello :: int cause to print data" + e.toString());
                     e.printStackTrace();
                 }
