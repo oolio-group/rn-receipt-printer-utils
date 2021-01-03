@@ -66,6 +66,7 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
 //        Log.e(LOG_TAG, "bello ::  compaibilit start to print raw data ", ((Throwable)rawBase64Data).toString());
 //        String str = new String(base64Data);
 //        Log.v(LOG_TAG, "bello :: int base64 data inside netprintermodules ", str);
+        Log.e(LOG_TAG, "bello :: int bytes.length" + base64Data.length);
         adapter.printByteData(base64Data, errorCallback);
     }
 
