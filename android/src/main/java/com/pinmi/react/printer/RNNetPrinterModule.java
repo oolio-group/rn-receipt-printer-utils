@@ -17,6 +17,7 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
 
     private PrinterAdapter adapter;
     private ReactApplicationContext reactContext;
+    private String LOG_TAG = "RNNetPrinterModule";
 
     public RNNetPrinterModule(ReactApplicationContext reactContext){
         super(reactContext);
@@ -67,6 +68,7 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
 //        String str = new String(base64Data);
 //        Log.v(LOG_TAG, "bello :: int base64 data inside netprintermodules ", str);
         Log.e(LOG_TAG, "bello :: int bytes.length" + base64Data.length);
+        Log.e(LOG_TAG, "bello :: int bytes" + Arrays.toString(base64Data));
         adapter.printByteData(base64Data, errorCallback);
     }
 
