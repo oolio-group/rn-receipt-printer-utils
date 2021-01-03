@@ -259,7 +259,7 @@ export const NetPrinter = {
     }
   },
 
-  printBuffer: (text: string): void => {
+  printBuffer: (text: any): void => {
     if (Platform.OS === "ios") {
       const processedText = textPreprocessingIOS(text);
       RNNetPrinter.printRawData(
