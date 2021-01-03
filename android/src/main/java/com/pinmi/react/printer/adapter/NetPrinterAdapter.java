@@ -223,7 +223,7 @@ public class NetPrinterAdapter implements PrinterAdapter {
 
     @Override
     public void printByteData(byte[] rawBase64Data, Callback errorCallback) {
-        Log.e(LOG_TAG, "bello ::  compaibilit start to print raw data ", ((Throwable)rawBase64Data).toString());
+//        Log.e(LOG_TAG, "bello ::  compaibilit start to print raw data ", ((Throwable)rawBase64Data).toString());
         if (this.mSocket == null) {
             errorCallback.invoke("bluetooth connection is not built, may be you forgot to connectPrinter");
             return;
@@ -234,7 +234,7 @@ public class NetPrinterAdapter implements PrinterAdapter {
         final byte[] rawData = rawBase64Data;
         final Socket socket = this.mSocket;
         String str = new String(rawBase64Data);
-        Log.e(LOG_TAG, "bello ::  int start to print raw data ", str);
+//        Log.e(LOG_TAG, "bello ::  int start to print raw data ", str);
 
         new Thread(new Runnable() {
             @Override
