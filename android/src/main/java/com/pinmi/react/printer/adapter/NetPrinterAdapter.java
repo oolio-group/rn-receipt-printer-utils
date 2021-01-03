@@ -222,7 +222,7 @@ public class NetPrinterAdapter implements PrinterAdapter {
     }
 
     @Override
-    public void printRawData(bytes[] rawBase64Data, Callback errorCallback) {
+    public void printRawData(byte[] rawBase64Data, Callback errorCallback) {
         if (this.mSocket == null) {
             errorCallback.invoke("bluetooth connection is not built, may be you forgot to connectPrinter");
             return;
