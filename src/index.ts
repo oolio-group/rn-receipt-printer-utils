@@ -258,6 +258,21 @@ export const NetPrinter = {
       );
     }
   },
+
+  printBuffer: (text: string): void => {
+    if (Platform.OS === "ios") {
+      const processedText = textPreprocessingIOS(text);
+      RNNetPrinter.printRawData(
+        processedText.text,
+        processedText.opts,
+        (error: Error) => console.warn(error)
+      );
+    } else {
+      RNNetPrinter.printRawData(text, (error: Error) =>
+        console.warn(error)
+      );
+    }
+  },
 };
 
 export const NetPrinterEventEmitter = new NativeEventEmitter(RNNetPrinter);

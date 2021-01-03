@@ -42,9 +42,11 @@ export declare const NetPrinter: {
     closeConn: () => Promise<void>;
     printText: (text: string, opts?: {}) => void;
     printBill: (text: string, opts?: {}) => void;
+    printBuffer: (text: string) => void;
 };
 export declare const NetPrinterEventEmitter: NativeEventEmitter;
 export declare enum RN_THERMAL_RECEIPT_PRINTER_EVENTS {
     EVENT_NET_PRINTER_SCANNED_SUCCESS = "scannerResolved",
+    EVENT_NET_PRINTER_SCANNING = "scannerRunning",
     EVENT_NET_PRINTER_SCANNED_ERROR = "registerError"
 }

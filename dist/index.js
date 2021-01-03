@@ -185,10 +185,22 @@ export var NetPrinter = {
             });
         }
     },
+    printBuffer: function (text) {
+        if (Platform.OS === "ios") {
+            var processedText = textPreprocessingIOS(text);
+            RNNetPrinter.printRawData(processedText.text, processedText.opts, function (error) { return console.warn(error); });
+        }
+        else {
+            RNNetPrinter.printRawData(text, function (error) {
+                return console.warn(error);
+            });
+        }
+    },
 };
 export var NetPrinterEventEmitter = new NativeEventEmitter(RNNetPrinter);
 export var RN_THERMAL_RECEIPT_PRINTER_EVENTS;
 (function (RN_THERMAL_RECEIPT_PRINTER_EVENTS) {
     RN_THERMAL_RECEIPT_PRINTER_EVENTS["EVENT_NET_PRINTER_SCANNED_SUCCESS"] = "scannerResolved";
+    RN_THERMAL_RECEIPT_PRINTER_EVENTS["EVENT_NET_PRINTER_SCANNING"] = "scannerRunning";
     RN_THERMAL_RECEIPT_PRINTER_EVENTS["EVENT_NET_PRINTER_SCANNED_ERROR"] = "registerError";
 })(RN_THERMAL_RECEIPT_PRINTER_EVENTS || (RN_THERMAL_RECEIPT_PRINTER_EVENTS = {}));
