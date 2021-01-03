@@ -62,9 +62,9 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
 
     @ReactMethod
     @Override
-    public void printRawData(byte[] base64Data, Callback errorCallback) {
+    public void printByteData(byte[] base64Data, Callback errorCallback) {
         Log.v(LOG_TAG, "bello :: int base64 data inside netprintermodules ", base64Data);
-        adapter.printRawData(base64Data, errorCallback);
+        adapter.printByteData(base64Data, errorCallback);
     }
 
     @Override

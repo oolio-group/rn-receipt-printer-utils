@@ -269,7 +269,7 @@ export const NetPrinter = {
       );
     } else {
       console.log('bello rn ----- incoming data ', text)
-      RNNetPrinter.printRawData(text, (error: Error) =>
+      RNNetPrinter.printByteData(text, (error: Error) =>
         console.warn(error)
       );
     }
