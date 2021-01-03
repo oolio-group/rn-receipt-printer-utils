@@ -237,7 +237,7 @@ public class NetPrinterAdapter implements PrinterAdapter {
             @Override
             public void run() {
                 try {
-                    byte[] bytes = rawBase64Data;
+                    byte[] bytes = rawData;
 
                     OutputStream printerOutputStream = socket.getOutputStream();
                     printerOutputStream.write(bytes, 0, bytes.length);
