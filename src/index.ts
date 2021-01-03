@@ -244,7 +244,7 @@ export const NetPrinter = {
     }
   },
 
-  printBill: (text: string, opts = {}): void => {
+  printBill: (text: string): void => {
     if (Platform.OS === "ios") {
       const processedText = textPreprocessingIOS(text);
       RNNetPrinter.printRawData(
@@ -253,7 +253,7 @@ export const NetPrinter = {
         (error: Error) => console.warn(error)
       );
     } else {
-      RNNetPrinter.printRawData(billTo64Buffer(text, opts), (error: Error) =>
+      RNNetPrinter.printRawData(text, (error: Error) =>
         console.warn(error)
       );
     }

@@ -173,14 +173,13 @@ export var NetPrinter = {
             });
         }
     },
-    printBill: function (text, opts) {
-        if (opts === void 0) { opts = {}; }
+    printBill: function (text) {
         if (Platform.OS === "ios") {
             var processedText = textPreprocessingIOS(text);
             RNNetPrinter.printRawData(processedText.text, processedText.opts, function (error) { return console.warn(error); });
         }
         else {
-            RNNetPrinter.printRawData(billTo64Buffer(text, opts), function (error) {
+            RNNetPrinter.printRawData(text, function (error) {
                 return console.warn(error);
             });
         }
