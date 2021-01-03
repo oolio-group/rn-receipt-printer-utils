@@ -196,6 +196,9 @@ public class NetPrinterAdapter implements PrinterAdapter {
             errorCallback.invoke("bluetooth connection is not built, may be you forgot to connectPrinter");
             return;
         }
+
+        Log.v(LOG_TAG, "start to print raw data ");
+
         final String rawData = rawBase64Data;
         final Socket socket = this.mSocket;
         Log.v(LOG_TAG, "start to print raw data " + rawBase64Data);
