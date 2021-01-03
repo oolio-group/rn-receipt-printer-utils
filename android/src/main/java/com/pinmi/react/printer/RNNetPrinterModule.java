@@ -8,6 +8,8 @@ import com.pinmi.react.printer.adapter.BLEPrinterDeviceId;
 import com.pinmi.react.printer.adapter.NetPrinterAdapter;
 import com.pinmi.react.printer.adapter.NetPrinterDeviceId;
 import com.pinmi.react.printer.adapter.PrinterAdapter;
+import android.util.Log;
+import java.util.*;
 
 /**
  * Created by xiesubin on 2017/9/22.
