@@ -184,4 +184,8 @@ public class BLEPrinterAdapter implements PrinterAdapter{
             }
         }).start();
     }
+
+    @Override
+    public void printByteData(byte[] rawBase64Data, Callback errorCallback) {
+    }
 }

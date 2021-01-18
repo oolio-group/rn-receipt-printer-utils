@@ -1,5 +1,5 @@
 {
-  "name": "react-native-thermal-receipt-printer",
+  "name": "rn-receipt-printer-utils",
   "version": "1.1.5",
   "description": "Fork of react-native-printer. A React Native Library to support USB/BLE/Net printer",
   "main": "dist/index.js",
@@ -12,13 +12,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/HeligPfleigh/react-native-thermal-receipt-printer.git"
+    "url": "https://github.com/hitz-group/rn-receipt-printer-utils.git"
   },
   "files": [
     "dist",
     "android",
     "ios",
-    "react-native-thermal-receipt-printer.podspec"
+    "rn-receipt-printer-utils.podspec"
   ],
   "keywords": [
     "react-native",
@@ -48,6 +48,6 @@
     "typescript": "^4.0.2"
   },
   "author": "diandanbao",
-  "homepage": "https://github.com/HeligPfleigh/react-native-thermal-receipt-printer#readme",
+  "homepage": "https://github.com/hitz-group/rn-receipt-printer-utils#readme",
   "license": "ISC"
 }

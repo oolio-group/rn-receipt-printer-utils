@@ -244,22 +244,7 @@ export const NetPrinter = {
     }
   },
 
-  printBill: (text: string, opts = {}): void => {
-    if (Platform.OS === "ios") {
-      const processedText = textPreprocessingIOS(text);
-      RNNetPrinter.printRawData(
-        processedText.text,
-        processedText.opts,
-        (error: Error) => console.warn(error)
-      );
-    } else {
-      RNNetPrinter.printRawData(billTo64Buffer(text, opts), (error: Error) =>
-        console.warn(error)
-      );
-    }
-  },
-
-  printBuffer: (text: string): void => {
+  printBill: (text: string): void => {
     if (Platform.OS === "ios") {
       const processedText = textPreprocessingIOS(text);
       RNNetPrinter.printRawData(
@@ -269,6 +254,22 @@ export const NetPrinter = {
       );
     } else {
       RNNetPrinter.printRawData(text, (error: Error) =>
+        console.warn(error)
+      );
+    }
+  },
+
+  printBuffer: (text: any): void => {
+    if (Platform.OS === "ios") {
+      const processedText = textPreprocessingIOS(text);
+      RNNetPrinter.printRawData(
+        processedText.text,
+        processedText.opts,
+        (error: Error) => console.warn(error)
+      );
+    } else {
+      console.log('bello rn ----- incoming data ', text)
+      RNNetPrinter.printByteData(Object.values(text), (error: Error) =>
         console.warn(error)
       );
     }

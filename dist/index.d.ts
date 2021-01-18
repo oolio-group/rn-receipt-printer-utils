@@ -41,8 +41,8 @@ export declare const NetPrinter: {
     connectPrinter: (host: string, port: string) => Promise<INetPrinter>;
     closeConn: () => Promise<void>;
     printText: (text: string, opts?: {}) => void;
-    printBill: (text: string, opts?: {}) => void;
-    printBuffer: (text: string) => void;
+    printBill: (text: string) => void;
+    printBuffer: (text: any) => void;
 };
 export declare const NetPrinterEventEmitter: NativeEventEmitter;
 export declare enum RN_THERMAL_RECEIPT_PRINTER_EVENTS {

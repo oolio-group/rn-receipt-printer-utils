@@ -74,6 +74,12 @@ public class RNBLEPrinterModule extends ReactContextBaseJavaModule implements RN
         adapter.selectDevice(BLEPrinterDeviceId.valueOf(innerAddress), successCallback, errorCallback);
     }
 
+    @ReactMethod
+    @Override
+    public void printByteData(byte[] base64Data, Callback errorCallback) {
+        adapter.printByteData(base64Data, errorCallback);
+    }
+
     @Override
     public String getName() {
         return "RNBLEPrinter";

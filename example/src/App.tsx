@@ -14,7 +14,7 @@ import {
   IUSBPrinter,
   IBLEPrinter,
   INetPrinter,
-} from "react-native-thermal-receipt-printer";
+} from "rn-receipt-printer-utils";
 import Loader from "./Loader";
 
 const printerList: Record<string, any> = {

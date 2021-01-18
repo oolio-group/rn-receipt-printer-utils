@@ -18,6 +18,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 /**
  * Created by xiesubin on 2017/9/22.
@@ -196,19 +197,60 @@ public class NetPrinterAdapter implements PrinterAdapter {
             errorCallback.invoke("bluetooth connection is not built, may be you forgot to connectPrinter");
             return;
         }
+
+        Log.v(LOG_TAG, "bello :: start to print raw data ");
+
         final String rawData = rawBase64Data;
         final Socket socket = this.mSocket;
-        Log.v(LOG_TAG, "start to print raw data " + rawBase64Data);
+        Log.e(LOG_TAG, "bello ::  start to print raw data " + rawBase64Data);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     byte[] bytes = Base64.decode(rawData, Base64.DEFAULT);
+
                     OutputStream printerOutputStream = socket.getOutputStream();
                     printerOutputStream.write(bytes, 0, bytes.length);
                     printerOutputStream.flush();
                 } catch (IOException e) {
-                    Log.e(LOG_TAG, "failed to print data" + rawData);
+                    Log.e(LOG_TAG, "bello :: failed to print data" + rawData);
+                    Log.e(LOG_TAG, "bello :: cause to print data" + e.toString());
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
+    @Override
+    public void printByteData(byte[] rawBase64Data, Callback errorCallback) {
+//        Log.e(LOG_TAG, "bello ::  compaibilit start to print raw data ", ((Throwable)rawBase64Data).toString());
+        if (this.mSocket == null) {
+            errorCallback.invoke("bluetooth connection is not built, may be you forgot to connectPrinter");
+            return;
+        }
+
+        Log.v(LOG_TAG, "bello :: int start to print raw data ");
+
+        final byte[] rawData = rawBase64Data;
+        final Socket socket = this.mSocket;
+        String str = new String(rawBase64Data);
+//        Log.e(LOG_TAG, "bello ::  int start to print raw data ", str);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    byte[] bytes = rawData;
+
+                    OutputStream printerOutputStream = socket.getOutputStream();
+                    Log.e(LOG_TAG, "bello :: int bytes" + Arrays.toString(bytes));
+                    Log.e(LOG_TAG, "bello :: int bytes.length" + bytes.length);
+                    printerOutputStream.write(bytes, 0, bytes.length);
+                    printerOutputStream.flush();
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, "bello :: int failed to print data");
+                    Log.e(LOG_TAG, "bello :: int cause to print data" + e.toString());
                     e.printStackTrace();
                 }
             }

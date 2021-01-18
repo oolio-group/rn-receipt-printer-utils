@@ -8,6 +8,8 @@ import com.pinmi.react.printer.adapter.BLEPrinterDeviceId;
 import com.pinmi.react.printer.adapter.NetPrinterAdapter;
 import com.pinmi.react.printer.adapter.NetPrinterDeviceId;
 import com.pinmi.react.printer.adapter.PrinterAdapter;
+import android.util.Log;
+import java.util.*;
 
 /**
  * Created by xiesubin on 2017/9/22.
@@ -17,6 +19,7 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
 
     private PrinterAdapter adapter;
     private ReactApplicationContext reactContext;
+    private String LOG_TAG = "RNNetPrinterModule";
 
     public RNNetPrinterModule(ReactApplicationContext reactContext){
         super(reactContext);
@@ -58,6 +61,17 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
     @Override
     public void printRawData(String base64Data, Callback errorCallback) {
         adapter.printRawData(base64Data, errorCallback);
+    }
+
+    @ReactMethod
+    @Override
+    public void printByteData(byte[] base64Data, Callback errorCallback) {
+//        Log.e(LOG_TAG, "bello ::  compaibilit start to print raw data ", ((Throwable)rawBase64Data).toString());
+//        String str = new String(base64Data);
+//        Log.v(LOG_TAG, "bello :: int base64 data inside netprintermodules ", str);
+        Log.e(LOG_TAG, "bello :: int bytes.length" + base64Data.length);
+        Log.e(LOG_TAG, "bello :: int bytes" + Arrays.toString(base64Data));
+        adapter.printByteData(base64Data, errorCallback);
     }
 
     @Override
