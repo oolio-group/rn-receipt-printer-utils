@@ -1,18 +1,19 @@
 {
-  "name": "rn-receipt-printer-utils",
-  "version": "1.1.5",
+
+  "name": "@tillpos/rn-receipt-printer-utils",
+  "version": "0.0.3",
   "description": "Fork of react-native-printer. A React Native Library to support USB/BLE/Net printer",
-  "main": "dist/index.js",
-  "source": "dist/index.js",
+  "main": "lib/index.js",
+  "source": "lib/index.js",
   "scripts": {
     "pods": "cd example && pod-install --quiet",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn && yarn pods",
-    "build": "rimraf ./dist && tsc"
+    "build": "rimraf ./lib && tsc"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hitz-group/rn-receipt-printer-utils.git"
+    "url": "http://github.com/hitz-group/rn-receipt-printer-utils.git"
   },
   "files": [
     "dist",
@@ -20,6 +21,11 @@
     "ios",
     "rn-receipt-printer-utils.podspec"
   ],
+  "types": "lib",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/hitz-group/rn-receipt-printer-utils/issues"
+  },
   "keywords": [
     "react-native",
     "thermal",
@@ -37,7 +43,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.10",
-    "@types/node": "^14.6.0",
+    "@types/node": "^14.14.20",
     "@types/react": "^16.9.46",
     "@types/react-native": "^0.63.9",
     "@types/react-test-renderer": "^16.9.3",
@@ -45,9 +51,12 @@
     "react": "^16.13.1",
     "react-native": "^0.63.2",
     "rimraf": "^3.0.2",
-    "typescript": "^4.0.2"
+    "typescript": "^4.1.3",
+    "ts-loader": "^2.3.4",
+    "tslint": "^5.7.0",
+    "tslint-eslint-rules": "^4.1.1"
   },
-  "author": "diandanbao",
-  "homepage": "https://github.com/hitz-group/rn-receipt-printer-utils#readme",
-  "license": "ISC"
+  "peerDependencies": {
+    "node-libs-react-native": "^1.2.1"
+  }
 }
