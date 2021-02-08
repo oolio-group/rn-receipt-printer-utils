@@ -1,7 +1,5 @@
 import { NativeModules, NativeEventEmitter, Platform } from "react-native";
 
-import * as EPToolkit from "./utils/EPToolkit";
-
 const RNUSBPrinter = NativeModules.RNUSBPrinter;
 const RNBLEPrinter = NativeModules.RNBLEPrinter;
 const RNNetPrinter = NativeModules.RNNetPrinter;
@@ -30,37 +28,7 @@ export interface INetPrinter {
   port: string;
 }
 
-const textTo64Buffer = (text: string, opts: PrinterOptions) => {
-  const defaultOptions = {
-    beep: false,
-    cut: false,
-    tailingLine: false,
-    encoding: "UTF8",
-  };
-
-  const options = {
-    ...defaultOptions,
-    ...opts,
-  };
-  const buffer = EPToolkit.exchange_text(text, options);
-  return buffer.toString("base64");
-};
-
-const billTo64Buffer = (text: string, opts: PrinterOptions) => {
-  const defaultOptions = {
-    beep: true,
-    cut: true,
-    encoding: "UTF8",
-    tailingLine: true,
-  };
-  const options = {
-    ...defaultOptions,
-    ...opts,
-  };
-  const buffer = EPToolkit.exchange_text(text, options);
-  return buffer.toString("base64");
-};
-
+// TODO: may be we can remove this, as we are going to send buffer as input (for iOS)
 const textPreprocessingIOS = (text: string) => {
   let options = {
     beep: true,
@@ -78,11 +46,6 @@ const textPreprocessingIOS = (text: string) => {
     opts: options,
   };
 };
-
-// const imageToBuffer = async (imagePath: string, threshold: number = 60) => {
-//   const buffer = await EPToolkit.exchange_image(imagePath, threshold);
-//   return buffer.toString("base64");
-// };
 
 export const USBPrinter = {
   init: (): Promise<void> =>
@@ -117,15 +80,8 @@ export const USBPrinter = {
       resolve();
     }),
 
-  printText: (text: string, opts: PrinterOptions = {}): void =>
-    RNUSBPrinter.printRawData(textTo64Buffer(text, opts), (error: Error) =>
-      console.warn(error)
-    ),
-
-  printBill: (text: string, opts: PrinterOptions = {}): void =>
-    RNUSBPrinter.printRawData(billTo64Buffer(text, opts), (error: Error) =>
-      console.warn(error)
-    ),
+  print: (text: string): void =>
+    RNUSBPrinter.printRawData(text, (error: Error) => console.warn(error)),
 };
 
 export const BLEPrinter = {
@@ -160,7 +116,7 @@ export const BLEPrinter = {
       resolve();
     }),
 
-  printText: (text: string, opts: PrinterOptions = {}): void => {
+  print: (text: string): void => {
     if (Platform.OS === "ios") {
       const processedText = textPreprocessingIOS(text);
       RNBLEPrinter.printRawData(
@@ -169,31 +125,9 @@ export const BLEPrinter = {
         (error: Error) => console.warn(error)
       );
     } else {
-      RNBLEPrinter.printRawData(textTo64Buffer(text, opts), (error: Error) =>
-        console.warn(error)
-      );
+      RNBLEPrinter.printRawData(text, (error: Error) => console.warn(error));
     }
   },
-
-  printBill: (text: string, opts: PrinterOptions = {}): void => {
-    if (Platform.OS === "ios") {
-      const processedText = textPreprocessingIOS(text);
-      RNBLEPrinter.printRawData(
-        processedText.text,
-        processedText.opts,
-        (error: Error) => console.warn(error)
-      );
-    } else {
-      RNBLEPrinter.printRawData(billTo64Buffer(text, opts), (error: Error) =>
-        console.warn(error)
-      );
-    }
-  },
-
-  // printImage: async (imagePath: string) => {
-  //   const tmp = await imageToBuffer(imagePath);
-  //   RNBLEPrinter.printRawData(tmp, (error: Error) => console.warn(error));
-  // },
 };
 
 export const NetPrinter = {
@@ -229,7 +163,7 @@ export const NetPrinter = {
       resolve();
     }),
 
-  printText: (text: string, opts = {}): void => {
+  print: (text: string): void => {
     if (Platform.OS === "ios") {
       const processedText = textPreprocessingIOS(text);
       RNNetPrinter.printRawData(
@@ -238,39 +172,11 @@ export const NetPrinter = {
         (error: Error) => console.warn(error)
       );
     } else {
-      RNNetPrinter.printRawData(textTo64Buffer(text, opts), (error: Error) =>
-        console.warn(error)
-      );
-    }
-  },
-
-  printBill: (text: string): void => {
-    if (Platform.OS === "ios") {
-      const processedText = textPreprocessingIOS(text);
-      RNNetPrinter.printRawData(
-        processedText.text,
-        processedText.opts,
-        (error: Error) => console.warn(error)
-      );
-    } else {
-      RNNetPrinter.printRawData(text, (error: Error) =>
-        console.warn(error)
-      );
-    }
-  },
-
-  printBuffer: (text: any): void => {
-    if (Platform.OS === "ios") {
-      const processedText = textPreprocessingIOS(text);
-      RNNetPrinter.printRawData(
-        processedText.text,
-        processedText.opts,
-        (error: Error) => console.warn(error)
-      );
-    } else {
-      RNNetPrinter.printByteData(Object.values(text), (error: Error) =>
-        console.warn(error)
-      );
+      RNNetPrinter.printRawData(text, (error: Error) => console.warn(error));
+      // Or may be we try to send byte data
+      // RNNetPrinter.printByteData(Object.values(text), (error: Error) =>
+      //    console.warn(error)
+      // );
     }
   },
 };
