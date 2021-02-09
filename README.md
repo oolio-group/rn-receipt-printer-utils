@@ -9,7 +9,7 @@ A React Native Library to support USB/BLE/Net printer
 ## Installation
 
 ```
-yarn add rn-receipt-printer-utils
+yarn add @tillpos/rn-receipt-printer-utils
 ```
 
 ## Troubleshoot
@@ -49,17 +49,6 @@ and comment out code related to Flipper in `ios/AppDelegate.m`
 | BLEPrinter | :heavy_check_mark: | :heavy_check_mark: |
 | NetPrinter | :heavy_check_mark: | :heavy_check_mark: |
 
-## Predefined tag
-| Tags          | Description           |
-|:-------------:|:---------------------:|
-| C             | Center                |
-| D             | Medium font           |
-| B             | Large font            |
-| M             | Medium font           |
-| CM            | Medium font, centered |
-| CB            | Medium font, centered |
-| CD            | Large font, centered  |
-
 ## Development workflow
 
 To get started with the project, run `yarn bootstrap` in the root directory to install the required dependencies for each package:
@@ -95,10 +84,10 @@ import {
   USBPrinter,
   NetPrinter,
   BLEPrinter,
-} from "rn-receipt-printer-utils";
+} from "@tillpos/rn-receipt-printer-utils";
 
-USBPrinter.printText("<C>sample text</C>");
-USBPrinter.printBill("<C>sample bill</C>");
+USBPrinter.printText("sample text");
+USBPrinter.printBill("sample bill");
 ```
 
 ## Example
