@@ -240,6 +240,8 @@ public class NetPrinterAdapter implements PrinterAdapter {
                     byte[] bytes = rawData;
 
                     OutputStream printerOutputStream = socket.getOutputStream();
+                    Log.e(LOG_TAG, "bello :: int bytes" + Arrays.toString(bytes));
+                    Log.e(LOG_TAG, "bello :: int bytes.length" + bytes.length);
                     printerOutputStream.write(bytes, 0, bytes.length);
                     printerOutputStream.flush();
                 } catch (IOException e) {
