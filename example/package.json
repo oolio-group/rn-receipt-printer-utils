@@ -1,6 +1,6 @@
 {
   "name": "rn-receipt-printer-utils-example",
-  "description": "Example app for rn-receipt-printer-utils",
+  "description": "Example app for @tillpos/rn-receipt-printer-utils",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
     "react": "16.13.1",
     "react-native": "0.63.2"
   },
