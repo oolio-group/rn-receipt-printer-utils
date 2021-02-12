@@ -5,7 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { NetPrinter } from "@tillpos/rn-receipt-printer-utils";
+import { NetPrinter } from "rn-receipt-printer-utils";
 import { Buffer } from "buffer";
 import React, {
   Fragment,
@@ -17,7 +17,7 @@ import React, {
 
 export const usePrinterConnection = () => {
   const sendMessage = useCallback(async (buffer) => {
-    NetPrinter.print(buffer.toString('base64'));
+    NetPrinter.print(buffer.toString("base64"));
   }, []);
 
   return useMemo(
@@ -31,10 +31,10 @@ export const usePrinterConnection = () => {
 interface Printer {
   device_name: string;
   host: string;
-  port: number;
+  port: string;
 }
 const PRINTERS: Array<Printer> = [
-  { device_name: "P1", host: "192.168.0.8", port: 9100 },
+  { device_name: "P1", host: "192.168.1.251", port: "9100" },
 ];
 
 export default function App() {
@@ -65,7 +65,7 @@ export default function App() {
 
   const testPrint = useCallback(async () => {
     if (currentPrinter) {
-      const buf = Buffer.from('Minions');
+      const buf = Buffer.from("Minions");
 
       await sendMessage(buf);
     }

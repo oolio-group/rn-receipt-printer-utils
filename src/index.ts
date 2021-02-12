@@ -118,10 +118,10 @@ export const BLEPrinter = {
 
   print: (text: string): void => {
     if (Platform.OS === "ios") {
-      const processedText = textPreprocessingIOS(text);
+      // const processedText = textPreprocessingIOS(text);
       RNBLEPrinter.printRawData(
-        processedText.text,
-        processedText.opts,
+        text,
+        // processedText.opts,
         (error: Error) => console.warn(error)
       );
     } else {
