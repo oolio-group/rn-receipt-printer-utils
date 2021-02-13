@@ -39,7 +39,6 @@ RCT_EXPORT_METHOD(connectPrinter:(NSInteger)vendorId
 }
 
 RCT_EXPORT_METHOD(printRawData:(NSString *)text
-                  printerOptions:(NSDictionary *)options
                   fail:(RCTResponseSenderBlock)errorCallback) {
     // TODO
     errorCallback(@[@"This function is not supported"]);
