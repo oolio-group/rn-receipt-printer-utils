@@ -22,7 +22,7 @@ NSString *const EVENT_SCANNER_RUNNING = @"scannerRunning";
 @implementation PrivateIP
 
 - (NSString *)getIPAddress {
-    
+
     NSString *address = @"error";
     struct ifaddrs *interfaces = NULL;
     struct ifaddrs *temp_addr = NULL;
@@ -38,18 +38,18 @@ NSString *const EVENT_SCANNER_RUNNING = @"scannerRunning";
                 if([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
                     // Get NSString from C String
                     address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
-                    
+
                 }
-                
+
             }
-            
+
             temp_addr = temp_addr->ifa_next;
         }
     }
     // Free memory
     freeifaddrs(interfaces);
     return address;
-    
+
 }
 
 @end
@@ -82,7 +82,7 @@ RCT_EXPORT_METHOD(getDeviceList:(RCTResponseSenderBlock)successCallback
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self scan];
     });
-    
+
     successCallback(@[_printerArray]);
 }
 
@@ -93,10 +93,10 @@ RCT_EXPORT_METHOD(getDeviceList:(RCTResponseSenderBlock)successCallback
         is_scanning = YES;
         [self sendEventWithName:EVENT_SCANNER_RUNNING body:@YES];
         _printerArray = [NSMutableArray new];
-        
+
         NSString *prefix = [localIP substringToIndex:([localIP rangeOfString:@"." options:NSBackwardsSearch].location)];
         NSInteger suffix = [[localIP substringFromIndex:([localIP rangeOfString:@"." options:NSBackwardsSearch].location)] intValue];
-        
+
         for (NSInteger i = 1; i < 255; i++) {
             if (i == suffix) continue;
             NSString *testIP = [NSString stringWithFormat:@"%@.%ld", prefix, (long)i];
@@ -104,11 +104,11 @@ RCT_EXPORT_METHOD(getDeviceList:(RCTResponseSenderBlock)successCallback
             [[PrinterSDK defaultPrinterSDK] connectIP:testIP];
             [NSThread sleepForTimeInterval:0.5];
         }
-        
+
         NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:_printerArray];
         NSArray *arrayWithoutDuplicates = [orderedSet array];
         _printerArray = (NSMutableArray *)arrayWithoutDuplicates;
-        
+
         [self sendEventWithName:EVENT_SCANNER_RESOLVED body:_printerArray];
     } @catch (NSException *exception) {
         NSLog(@"No connection");
@@ -137,32 +137,23 @@ RCT_EXPORT_METHOD(connectPrinter:(NSString *)host
     @try {
         BOOL isConnectSuccess = [[PrinterSDK defaultPrinterSDK] connectIP:host];
         !isConnectSuccess ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host] : nil;
-        
+
         connected_ip = host;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"NetPrinterConnected" object:nil];
         successCallback(@[[NSString stringWithFormat:@"Connecting to printer %@", host]]);
-        
+
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
     }
 }
 
 RCT_EXPORT_METHOD(printRawData:(NSString *)text
-                  printerOptions:(NSDictionary *)options
                   fail:(RCTResponseSenderBlock)errorCallback) {
     @try {
-        NSNumber* beepPtr = [options valueForKey:@"beep"];
-        NSNumber* cutPtr = [options valueForKey:@"cut"];
-        
-        BOOL beep = (BOOL)[beepPtr intValue];
-        BOOL cut = (BOOL)[cutPtr intValue];
-        
+
         !connected_ip ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer"] : nil;
-        
-        // [[PrinterSDK defaultPrinterSDK] printTestPaper];
-        [[PrinterSDK defaultPrinterSDK] printText:text];
-        beep ? [[PrinterSDK defaultPrinterSDK] beep] : nil;
-        cut ? [[PrinterSDK defaultPrinterSDK] cutPaper] : nil;
+
+        [[PrinterSDK defaultPrinterSDK] sendHex:text];
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
     }

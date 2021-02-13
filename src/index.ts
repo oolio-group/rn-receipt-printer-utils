@@ -28,25 +28,6 @@ export interface INetPrinter {
   port: string;
 }
 
-// TODO: may be we can remove this, as we are going to send buffer as input (for iOS)
-const textPreprocessingIOS = (text: string) => {
-  let options = {
-    beep: true,
-    cut: true,
-  };
-  return {
-    text: text
-      .replace(/<\/?CB>/g, "")
-      .replace(/<\/?CM>/g, "")
-      .replace(/<\/?CD>/g, "")
-      .replace(/<\/?C>/g, "")
-      .replace(/<\/?D>/g, "")
-      .replace(/<\/?B>/g, "")
-      .replace(/<\/?M>/g, ""),
-    opts: options,
-  };
-};
-
 export const USBPrinter = {
   init: (): Promise<void> =>
     new Promise((resolve, reject) =>
@@ -118,12 +99,7 @@ export const BLEPrinter = {
 
   print: (text: string): void => {
     if (Platform.OS === "ios") {
-      const processedText = textPreprocessingIOS(text);
-      RNBLEPrinter.printRawData(
-        processedText.text,
-        processedText.opts,
-        (error: Error) => console.warn(error)
-      );
+      RNBLEPrinter.printRawData(text, (error: Error) => console.warn(error));
     } else {
       RNBLEPrinter.printRawData(text, (error: Error) => console.warn(error));
     }
@@ -165,12 +141,7 @@ export const NetPrinter = {
 
   print: (text: string): void => {
     if (Platform.OS === "ios") {
-      const processedText = textPreprocessingIOS(text);
-      RNNetPrinter.printRawData(
-        processedText.text,
-        processedText.opts,
-        (error: Error) => console.warn(error)
-      );
+      RNNetPrinter.printRawData(text, (error: Error) => console.warn(error));
     } else {
       RNNetPrinter.printRawData(text, (error: Error) => console.warn(error));
       // Or may be we try to send byte data
