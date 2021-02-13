@@ -8,7 +8,7 @@ target 'ThermalReceiptPrinterExample' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  pod 'rn-receipt-printer-utils', :path => '../..'
+  pod 'tillpos-rn-receipt-printer-utils', :path => '../..'
 
   use_native_modules!
 end
