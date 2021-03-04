@@ -123,11 +123,11 @@ export const NetPrinter = {
       )
     ),
 
-  connectPrinter: (host: string, port: string): Promise<INetPrinter> =>
+  connectPrinter: (host: string, port: number): Promise<INetPrinter> =>
     new Promise((resolve, reject) =>
       RNNetPrinter.connectPrinter(
         host,
-        port,
+        port + '',
         (printer: INetPrinter) => resolve(printer),
         (error: Error) => reject(error)
       )
@@ -141,6 +141,7 @@ export const NetPrinter = {
 
   print: (text: string): void => {
     if (Platform.OS === "ios") {
+      console.log('bello ', text);
       RNNetPrinter.printRawData(text, (error: Error) => console.warn(error));
     } else {
       RNNetPrinter.printRawData(text, (error: Error) => console.warn(error));
