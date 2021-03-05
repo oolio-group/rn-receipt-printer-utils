@@ -40,6 +40,8 @@ _Podfile_
 ```
 
 and comment out code related to Flipper in `ios/AppDelegate.m`
+![ios/AppDelegate.m](./.github/flipper.png)
+
 
 ## Support
 
