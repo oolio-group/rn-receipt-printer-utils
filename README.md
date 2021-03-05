@@ -1,8 +1,8 @@
-Originally forked from [react-native-thermal-receipt-printer](https://github.com/HeligPfleigh/react-native-thermal-receipt-printer)
 # @tillpos/rn-receipt-printer-utils
 
-Fork of `react-native-printer` and add implement for auto connect printer with usb
-A React Native Library to support USB/BLE/Net printer
+*Originally forked from [react-native-thermal-receipt-printer](https://github.com/HeligPfleigh/react-native-thermal-receipt-printer)*
+
+A React Native Library to connect to thermal printer over network and to send the buffer (data to be printed) to thermal printer.
 
 ![Node.js Package](https://github.com/HeligPfleigh/react-native-thermal-receipt-printer/workflows/Node.js%20Package/badge.svg)
 
@@ -45,9 +45,16 @@ and comment out code related to Flipper in `ios/AppDelegate.m`
 
 | Printer    | Android            | IOS                |
 | ---------- | ------------------ | ------------------ |
-| USBPrinter | :heavy_check_mark: |                    |
-| BLEPrinter | :heavy_check_mark: | :heavy_check_mark: |
+| USBPrinter | :x: |   :negative_squared_cross_mark:|
+| BLEPrinter | :x: | :x: |
 | NetPrinter | :heavy_check_mark: | :heavy_check_mark: |
+
+## Tested on following platforms (manual)
+
+| Platform    | Framework / lib            | Tested                |
+| ---------- | ------------------ | ------------------ |
+| Android | React Native |   :heavy_check_mark:|
+| iOS | React Native | :heavy_check_mark: |
 
 ## Development workflow
 
@@ -68,13 +75,19 @@ yarn example start
 To run the example app on Android:
 
 ```sh
-yarn example dev-android
+yarn example android
 ```
 
 To run the example app on iOS:
 
 ```sh
 yarn example ios
+```
+
+To make build
+
+```sh
+yarn prepare
 ```
 
 ## Usage
@@ -91,121 +104,6 @@ USBPrinter.printBill("sample bill");
 ```
 
 ## Example
-
-### USBPrinter (only support android)
-
-```typescript
-interface IUSBPrinter {
-  device_name: string;
-  vendor_id: number;
-  product_id: number;
-}
-```
-
-```javascript
-  const [printers, setPrinters] = useState([]);
-  const [currentPrinter, setCurrentPrinter] = useState();
-
-  useEffect = () => {
-    if(Platform.OS == 'android'){
-      USBPrinter.init().then(()=> {
-        //list printers
-        USBPrinter.getDeviceList().then(setPrinters);
-      })
-    }
-  }
-
-  const _connectPrinter = (printer) => USBPrinter.connectPrinter(printer.vendorID, printer.productId).then(() => setCurrentPrinter(printer))
-
-  const printTextTest = () => {
-    currentPrinter && USBPrinter.printText("<C>sample text</C>\n");
-  }
-
-  const printBillTest = () => {
-    currentPrinter && USBPrinter.printBill("<C>sample bill</C>");
-  }
-
-  ...
-
-  return (
-    <View style={styles.container}>
-      {
-        printers.map(printer => (
-          <TouchableOpacity key={printer.device_id} onPress={() => _connectPrinter(printer)}>
-            {`device_name: ${printer.device_name}, device_id: ${printer.device_id}, vendor_id: ${printer.vendor_id}, product_id: ${printer.product_id}`}
-          </TouchableOpacity>
-          ))
-      }
-      <TouchableOpacity onPress={printTextTest}>
-        <Text>Print Text</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={printBillTest}>
-        <Text>Print Bill Text</Text>
-      </TouchableOpacity>
-    </View>
-  )
-
-  ...
-
-```
-
-### BLEPrinter
-
-```typescript
-interface IBLEPrinter {
-  device_name: string;
-  inner_mac_address: string;
-}
-```
-
-```javascript
-  const [printers, setPrinters] = useState([]);
-  const [currentPrinter, setCurrentPrinter] = useState();
-
-  useEffect(() => {
-    BLEPrinter.init().then(()=> {
-      BLEPrinter.getDeviceList().then(setPrinters);
-    });
-  }, []);
-
-  _connectPrinter => (printer) => {
-    //connect printer
-    BLEPrinter.connectPrinter(printer.inner_mac_address).then(
-      setCurrentPrinter,
-      error => console.warn(error))
-  }
-
-  printTextTest = () => {
-    currentPrinter && USBPrinter.printText("<C>sample text</C>\n");
-  }
-
-  printBillTest = () => {
-    currentPrinter && USBPrinter.printBill("<C>sample bill</C>");
-  }
-
-  ...
-
-  return (
-    <View style={styles.container}>
-      {
-        this.state.printers.map(printer => (
-          <TouchableOpacity key={printer.inner_mac_address} onPress={() => _connectPrinter(printer)}>
-            {`device_name: ${printer.device_name}, inner_mac_address: ${printer.inner_mac_address}`}
-          </TouchableOpacity>
-          ))
-      }
-      <TouchableOpacity onPress={printTextTest}>
-        <Text>Print Text</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={printBillTest}>
-        <Text>Print Bill Text</Text>
-      </TouchableOpacity>
-    </View>
-  )
-
-  ...
-
-```
 
 ### NetPrinter
 
@@ -271,3 +169,12 @@ _Note:_ get list device for net printers is support scanning in local ip but not
   ...
 
 ```
+
+
+## TODO
+
+- [ ] Update documentation
+- [ ] Maintain Multiple connections
+- [ ] Use `release-it` to publish builds
+- [ ] Bluetooth support
+- [ ] USB support

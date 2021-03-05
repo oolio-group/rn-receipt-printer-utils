@@ -1,7 +1,7 @@
 {
 
   "name": "@tillpos/rn-receipt-printer-utils",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Fork of react-native-printer. A React Native Library to support USB/BLE/Net printer",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",

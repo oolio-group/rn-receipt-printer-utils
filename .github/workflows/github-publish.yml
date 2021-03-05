@@ -20,7 +20,7 @@ jobs:
     - name: Install Node Dependencies
       run: yarn install
     - name: Build packages
-      run: yarn build
+      run: yarn prepare
       env:
         CI: "TRUE"
     - name: Publish package
