@@ -127,7 +127,7 @@ export const NetPrinter = {
     new Promise((resolve, reject) =>
       RNNetPrinter.connectPrinter(
         host,
-        port + '',
+        port,
         (printer: INetPrinter) => resolve(printer),
         (error: Error) => reject(error)
       )
@@ -139,12 +139,11 @@ export const NetPrinter = {
       resolve();
     }),
 
-  print: (text: string): void => {
+  print: (data: Buffer): void => {
     if (Platform.OS === "ios") {
-      console.log('bello ', text);
-      RNNetPrinter.printRawData(text, (error: Error) => console.warn(error));
+      RNNetPrinter.printRawData(data.toString('hex'), (error: Error) => console.warn(error));
     } else {
-      RNNetPrinter.printRawData(text, (error: Error) => console.warn(error));
+      RNNetPrinter.printRawData(data.toString('base64'), (error: Error) => console.warn(error));
       // Or may be we try to send byte data
       // RNNetPrinter.printByteData(Object.values(text), (error: Error) =>
       //    console.warn(error)

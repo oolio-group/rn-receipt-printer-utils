@@ -1,13 +1,11 @@
 {
 
   "name": "@tillpos/rn-receipt-printer-utils",
-  "version": "0.0.10",
+  "version": "0.0.14",
   "description": "Fork of react-native-printer. A React Native Library to support USB/BLE/Net printer",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
-  "react-native": "src/index",
-  "source": "src/index",
   "author": "Till",
   "homepage":"https://github.com/hitz-group/rn-receipt-printer-utils.git",
   "scripts": {
