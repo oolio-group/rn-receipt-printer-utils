@@ -17,7 +17,7 @@ import React, {
 
 export const usePrinterConnection = () => {
   const sendMessage = useCallback(async (buffer) => {
-    NetPrinter.print(buffer.toString('base64'));
+    NetPrinter.print(buffer);
   }, []);
 
   return useMemo(

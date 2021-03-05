@@ -1,5 +1,5 @@
 {
-  "name": "rn-receipt-printer-utils-example",
+  "name": "@tillpos/rn-receipt-printer-utils-example",
   "description": "Example app for @tillpos/rn-receipt-printer-utils",
   "version": "0.0.1",
   "private": true,
