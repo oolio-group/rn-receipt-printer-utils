@@ -58,6 +58,11 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
     }
 
     @ReactMethod
+    public void connectAndSend(String host, Integer port, String data, Callback successCallback, Callback errorCallback) {
+        adapter.connectAndSend(host, port, data, successCallback, errorCallback);
+    }
+
+    @ReactMethod
     @Override
     public void printRawData(String base64Data, Callback errorCallback) {
         adapter.printRawData(base64Data, errorCallback);

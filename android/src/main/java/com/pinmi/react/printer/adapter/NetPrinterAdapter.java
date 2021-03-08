@@ -252,4 +252,24 @@ public class NetPrinterAdapter implements PrinterAdapter {
         }).start();
 
     }
+
+    @Override
+    public void connectAndSend(String host, Integer port, String rawBase64Data, Callback successCallback, Callback errorCallback)  {
+      try {
+          byte[] data = Base64.decode(rawBase64Data, Base64.DEFAULT);
+
+          Socket socket = new Socket();
+          socket.connect(new InetSocketAddress(host, port), 1500);
+          OutputStream output = socket.getOutputStream();
+          output.write(data);
+          output.close();
+          socket.close();
+      } catch(IOException e) {
+                            Log.e(LOG_TAG, "bello :: int cause to print data" + e.toString());
+                    e.printStackTrace();
+
+        // throw e;
+      }
+    }
+
 }

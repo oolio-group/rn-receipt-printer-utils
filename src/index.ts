@@ -1,4 +1,4 @@
-import { NativeModules, NativeEventEmitter, Platform } from "react-native";
+import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
 
 const RNUSBPrinter = NativeModules.RNUSBPrinter;
 const RNBLEPrinter = NativeModules.RNBLEPrinter;
@@ -25,7 +25,7 @@ export interface IBLEPrinter {
 export interface INetPrinter {
   device_name: string;
   host: string;
-  port: string;
+  port: number;
 }
 
 export const USBPrinter = {
@@ -98,7 +98,7 @@ export const BLEPrinter = {
     }),
 
   print: (text: string): void => {
-    if (Platform.OS === "ios") {
+    if (Platform.OS === 'ios') {
       RNBLEPrinter.printRawData(text, (error: Error) => console.warn(error));
     } else {
       RNBLEPrinter.printRawData(text, (error: Error) => console.warn(error));
@@ -140,22 +140,42 @@ export const NetPrinter = {
     }),
 
   print: (data: Buffer): void => {
-    if (Platform.OS === "ios") {
-      RNNetPrinter.printRawData(data.toString('hex'), (error: Error) => console.warn(error));
+    if (Platform.OS === 'ios') {
+      RNNetPrinter.printRawData(data.toString('hex'), (error: Error) =>
+        console.warn(error)
+      );
     } else {
-      RNNetPrinter.printRawData(data.toString('base64'), (error: Error) => console.warn(error));
+      RNNetPrinter.printRawData(data.toString('base64'), (error: Error) =>
+        console.warn(error)
+      );
       // Or may be we try to send byte data
       // RNNetPrinter.printByteData(Object.values(text), (error: Error) =>
       //    console.warn(error)
       // );
     }
   },
+
+  connectAndSend: (
+    host: string,
+    port: number,
+    data: Buffer
+  ): Promise<INetPrinter> => {
+    return new Promise((resolve, reject) =>
+      RNNetPrinter.connectAndSend(
+        host,
+        port,
+        Platform.OS === 'ios' ? data.toString('hex') : data.toString('base64'),
+        (printer: INetPrinter) => resolve(printer),
+        (error: Error) => reject(error)
+      )
+    );
+  },
 };
 
 export const NetPrinterEventEmitter = new NativeEventEmitter(RNNetPrinter);
 
 export enum RN_THERMAL_RECEIPT_PRINTER_EVENTS {
-  EVENT_NET_PRINTER_SCANNED_SUCCESS = "scannerResolved",
-  EVENT_NET_PRINTER_SCANNING = "scannerRunning",
-  EVENT_NET_PRINTER_SCANNED_ERROR = "registerError",
+  EVENT_NET_PRINTER_SCANNED_SUCCESS = 'scannerResolved',
+  EVENT_NET_PRINTER_SCANNING = 'scannerRunning',
+  EVENT_NET_PRINTER_SCANNED_ERROR = 'registerError',
 }
