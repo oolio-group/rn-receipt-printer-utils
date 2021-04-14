@@ -264,9 +264,11 @@ public class NetPrinterAdapter implements PrinterAdapter {
           output.write(data);
           output.close();
           socket.close();
+          successCallback.invoke();
       } catch(IOException e) {
                             Log.e(LOG_TAG, "bello :: int cause to print data" + e.toString());
                     e.printStackTrace();
+                errorCallback.invoke(e.toString());
 
         // throw e;
       }
