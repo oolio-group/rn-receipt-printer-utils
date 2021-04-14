@@ -1,32 +1,7 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
-import { NetPrinter } from "@tillpos/rn-receipt-printer-utils";
-import { Buffer } from "buffer";
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
-export const usePrinterConnection = () => {
-  const sendMessage = useCallback(async (buffer) => {
-    NetPrinter.print(buffer);
-  }, []);
-
-  return useMemo(
-    () => ({
-      sendMessage,
-    }),
-    [sendMessage]
-  );
-};
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { NetPrinter } from '@tillpos/rn-receipt-printer-utils';
+import { Buffer } from 'buffer';
+import React, { Fragment, useCallback, useEffect } from 'react';
 
 interface Printer {
   device_name: string;
@@ -34,26 +9,14 @@ interface Printer {
   port: number;
 }
 const PRINTERS: Array<Printer> = [
-  { device_name: "P1", host: "192.168.0.8", port: 9100 },
+  { device_name: 'P1', host: '192.168.0.8', port: 9100 },
+  { device_name: 'P2', host: '192.168.0.9', port: 9100 },
 ];
 
 export default function App() {
-  const [printers, setPrinters] = useState<Array<Printer>>([]);
-  const [currentPrinter, setCurrentPrinter] = useState();
-  const { sendMessage } = usePrinterConnection();
-
-  const _connectPrinter = (host: string, port: number) => {
-    //connect printer
-    NetPrinter.connectPrinter(host, port).then(
-      (printer: any) => setCurrentPrinter(printer),
-      (error: any) => console.warn(error)
-    );
-  };
-
   const initDevices = async () => {
     try {
       await NetPrinter.init();
-      setPrinters(PRINTERS);
     } catch (err) {
       console.warn(err);
     }
@@ -64,65 +27,51 @@ export default function App() {
   }, []);
 
   const testPrint = useCallback(async () => {
-    if (currentPrinter) {
-      const buf = Buffer.from('Minions');
+    const buffer = Buffer.from('Minions MinionsMinions \n');
 
-      await sendMessage(buf);
+    try {
+      await Promise.all(
+        PRINTERS.map(async (printer) => {
+          return await NetPrinter.connectAndSend(
+            printer.host,
+            printer.port,
+            buffer
+          );
+        })
+      );
+    } catch (err) {
+      console.log('error', err);
     }
-  }, [sendMessage, currentPrinter]);
+  }, []);
 
   return (
     <View style={styles.container}>
-      {printers.map((printer, i) => (
-        <TouchableOpacity
-          key={i}
-          style={{
-            padding: 10,
-            backgroundColor: "#fff",
-            margin: 10,
-            borderColor: "#000",
-            borderWidth: 1,
-          }}
-          onPress={() => _connectPrinter(printer.host, printer.port)}
-        >
-          <Text>
-            {" "}
-            {`device_name: ${printer.device_name}, host: ${printer.host}, port: ${printer.port}`}
-          </Text>
+      <Fragment>
+        <TouchableOpacity onPress={testPrint} style={styles.btn}>
+          <Text> Print receipt </Text>
         </TouchableOpacity>
-      ))}
-
-      {!currentPrinter && <Text>Select a printer</Text>}
-      {currentPrinter && (
-        <Fragment>
-          <TouchableOpacity
-            onPress={testPrint}
-            style={{ padding: 10, backgroundColor: "#ccc", margin: 10 }}
-          >
-            <Text> Print receipt </Text>
-          </TouchableOpacity>
-        </Fragment>
-      )}
+      </Fragment>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    // backgroundColor: Colors.lighter,
-  },
+  scrollView: {},
   engine: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
   },
-  body: {
-    // backgroundColor: Colors.white,
-  },
+  body: {},
   container: {
     marginTop: 32,
     paddingHorizontal: 24,
   },
   highlight: {
-    fontWeight: "700",
+    fontWeight: '700',
+  },
+  btn: {
+    padding: 10,
+    backgroundColor: '#ccc',
+    margin: 10,
   },
 });
