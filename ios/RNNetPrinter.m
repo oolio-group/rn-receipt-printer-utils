@@ -147,6 +147,23 @@ RCT_EXPORT_METHOD(connectPrinter:(NSString *)host
     }
 }
 
+
+RCT_EXPORT_METHOD(connectAndSend:(NSString *)host
+                  withPort:(nonnull NSNumber *)port
+                  printRawData:(NSString *)text
+                  success:(RCTResponseSenderBlock)successCallback
+                  fail:(RCTResponseSenderBlock)errorCallback) {
+    @try {
+        BOOL isConnectSuccess = [[PrinterSDK defaultPrinterSDK] connectIP:host];
+        !isConnectSuccess ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host] : nil;
+        [[PrinterSDK defaultPrinterSDK] sendHex:text];
+        successCallback(@[[NSString stringWithFormat:@"Sent to printer %@", host]]);
+
+    } @catch (NSException *exception) {
+        errorCallback(@[exception.reason]);
+    }
+}
+
 RCT_EXPORT_METHOD(printRawData:(NSString *)text
                   fail:(RCTResponseSenderBlock)errorCallback) {
     @try {
