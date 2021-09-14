@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NetPrinter } from '@tillpos/rn-receipt-printer-utils';
 import { Buffer } from 'buffer';
-import React, { Fragment, useCallback, useEffect } from 'react';
+import React, { Fragment, useCallback } from 'react';
 
 interface Printer {
   device_name: string;
@@ -14,18 +14,6 @@ const PRINTERS: Array<Printer> = [
 ];
 
 export default function App() {
-  const initDevices = async () => {
-    try {
-      await NetPrinter.init();
-    } catch (err) {
-      console.warn(err);
-    }
-  };
-
-  useEffect(() => {
-    initDevices();
-  }, []);
-
   const testPrint = useCallback(async () => {
     const buffer = Buffer.from('Minions MinionsMinions \n');
 
