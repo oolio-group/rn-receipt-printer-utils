@@ -6,7 +6,6 @@
 
 
 #import "RNUSBPrinter.h"
-#import "PrinterSDK.h"
 
 @implementation RNUSBPrinter
 

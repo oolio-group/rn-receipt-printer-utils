@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import "EpsonUtils.h"
-#import "PrinterSDK.h"
+#import "EpsonPrinterSDK.h"
 
 @implementation EpsonUtils
 
