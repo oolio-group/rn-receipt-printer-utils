@@ -4,6 +4,12 @@ const RNUSBPrinter = NativeModules.RNUSBPrinter;
 const RNBLEPrinter = NativeModules.RNBLEPrinter;
 const RNNetPrinter = NativeModules.RNNetPrinter;
 
+export enum PrinterBrand {
+  EPSON = 'EPSON',
+  STAR = 'STAR',
+  OTHER = 'OTHER',
+}
+
 export interface PrinterOptions {
   beep?: boolean;
   cut?: boolean;
@@ -11,19 +17,21 @@ export interface PrinterOptions {
   encoding?: string;
 }
 
-export interface IUSBPrinter {
+export interface IBasePrinter {
   device_name: string;
+  brand?: PrinterBrand;
+}
+
+export interface IUSBPrinter extends IBasePrinter {
   vendor_id: string;
   product_id: string;
 }
 
-export interface IBLEPrinter {
-  device_name: string;
-  inner_mac_address: string;
+export interface IBLEPrinter extends IBasePrinter {
+  bdAddress: string;
 }
 
-export interface INetPrinter {
-  device_name: string;
+export interface INetPrinter extends IBasePrinter {
   host: string;
   port: number;
 }
@@ -32,14 +40,14 @@ export interface INetPrinter {
 const SDK_RESPONSE_TIMEOUT = 5000;
 
 // Promise with timeout
-const promiseWithTimeout = (
-  promise: Promise<INetPrinter>
+const promiseWithTimeout = <T>(
+  promise: Promise<T>
 ): {
-  promiseOrTimeout: Promise<INetPrinter>;
+  promiseOrTimeout: Promise<T>;
   timeoutId: ReturnType<typeof setTimeout>;
 } => {
   let timeoutId;
-  const timeoutPromise: Promise<INetPrinter> = new Promise((_, reject) => {
+  const timeoutPromise: Promise<T> = new Promise((_, reject) => {
     timeoutId = setTimeout(() => {
       reject(new Error('Request timed out'));
     }, SDK_RESPONSE_TIMEOUT);
@@ -55,14 +63,16 @@ export const USBPrinter = {
   connectAndSend: (
     vendorId: string,
     productId: number,
-    data: Buffer
-  ): Promise<INetPrinter> => {
+    data: Buffer,
+    brand: PrinterBrand
+  ): Promise<IUSBPrinter> => {
     return new Promise((resolve, reject) =>
       RNUSBPrinter.connectAndSend(
         vendorId,
         productId,
         data.toString('base64'),
-        (printer: INetPrinter) => resolve(printer),
+        brand,
+        (printer: IUSBPrinter) => resolve(printer),
         (error: Error) => reject(error)
       )
     );
@@ -70,20 +80,25 @@ export const USBPrinter = {
 };
 
 export const BLEPrinter = {
-  connectAndSend: (bdAddress: string, data: Buffer): Promise<INetPrinter> => {
-    const { promiseOrTimeout, timeoutId } = promiseWithTimeout(
+  connectAndSend: (
+    bdAddress: string,
+    data: Buffer,
+    brand: PrinterBrand
+  ): Promise<IBLEPrinter> => {
+    const { promiseOrTimeout, timeoutId } = promiseWithTimeout<IBLEPrinter>(
       new Promise((resolve, reject) =>
         RNBLEPrinter.connectAndSend(
           bdAddress,
           data.toString('base64'),
-          (printer: INetPrinter) => resolve(printer),
+          brand,
+          (printer: IBLEPrinter) => resolve(printer),
           (error: Error) => reject(error)
         )
       )
     );
     return new Promise((resolve, reject) =>
       promiseOrTimeout
-        .then((printer: INetPrinter) => resolve(printer))
+        .then((printer: IBLEPrinter) => resolve(printer))
         .catch((error: Error) => reject(error))
         .finally(() => clearTimeout(timeoutId))
     );
@@ -94,14 +109,16 @@ export const NetPrinter = {
   connectAndSend: (
     host: string,
     port: number,
-    data: Buffer
+    data: Buffer,
+    brand: PrinterBrand
   ): Promise<INetPrinter> => {
-    const { promiseOrTimeout, timeoutId } = promiseWithTimeout(
+    const { promiseOrTimeout, timeoutId } = promiseWithTimeout<INetPrinter>(
       new Promise((resolve, reject) =>
         RNNetPrinter.connectAndSend(
           host,
           port,
           data.toString('base64'),
+          brand,
           (printer: INetPrinter) => resolve(printer),
           (error: Error) => reject(error)
         )
