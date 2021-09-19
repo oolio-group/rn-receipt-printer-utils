@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { NetPrinter } from '@tillpos/rn-receipt-printer-utils';
+import { NetPrinter, PrinterBrand } from '@tillpos/rn-receipt-printer-utils';
 import { Buffer } from 'buffer';
 import React, { Fragment, useCallback } from 'react';
 
@@ -23,7 +23,8 @@ export default function App() {
           return await NetPrinter.connectAndSend(
             printer.host,
             printer.port,
-            buffer
+            buffer,
+            PrinterBrand.EPSON
           );
         })
       );
