@@ -229,4 +229,8 @@ public class USBPrinterAdapter implements PrinterAdapter {
     @Override
     public void connectAndSend(String host, Integer port, String data, Callback successCallback, Callback errorCallback) {
     }
+
+    @Override
+    public void connectAndSend(PrinterDeviceId printerDeviceId, String data, Callback successCallback, Callback errorCallback) {
+    }
 }
