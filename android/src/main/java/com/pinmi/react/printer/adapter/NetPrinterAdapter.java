@@ -56,7 +56,6 @@ public class NetPrinterAdapter implements PrinterAdapter {
     @Override
     public void init(ReactApplicationContext reactContext, Callback successCallback, Callback errorCallback) {
         this.mContext = reactContext;
-        successCallback.invoke();
     }
 
     @Override
@@ -274,4 +273,7 @@ public class NetPrinterAdapter implements PrinterAdapter {
       }
     }
 
+    @Override
+    public void connectAndSend(PrinterDeviceId printerDeviceId, String data, Callback successCallback, Callback errorCallback) {
+    }
 }
