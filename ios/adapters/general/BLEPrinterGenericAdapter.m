@@ -8,6 +8,7 @@
 
 #import "BLEPrinterGenericAdapter.h"
 #import "GenericPrinterSDK.h"
+#import "../../utils/NSDataAdditions.h"
 
 @implementation BLEPrinterGenericAdapter
 
@@ -87,6 +88,23 @@
         !m_printer ? [NSException raise:@"Invalid connection" format:@"printRawData: Can't connect to printer"] : nil;
 
         [[PrinterSDK defaultPrinterSDK] sendHex:text];
+    } @catch (NSException *exception) {
+        errorCallback(@[exception.reason]);
+    }
+}
+
+- (void) connectAndSend:(NSString *)bdAddress
+           printRawData:(NSString *)text
+                success:(RCTResponseSenderBlock)successCallback
+                   fail:(RCTResponseSenderBlock)errorCallback {
+    @try {
+        Printer* selectedPrinter = [Printer alloc];
+        [selectedPrinter setValue:bdAddress forKey:@"UUIDString"];
+        [[PrinterSDK defaultPrinterSDK] connectBT:selectedPrinter];
+        
+        NSData* payload = [NSData dataWithBase64EncodedString:text];
+        [[PrinterSDK defaultPrinterSDK] sendHex:[payload hexadecimalString]];
+        successCallback(@[[NSString stringWithFormat:@"Successfuly printed"]]);
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
     }

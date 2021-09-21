@@ -8,6 +8,7 @@
 #import "GenericPrinterSDK.h"
 #include <ifaddrs.h>
 #include <arpa/inet.h>
+#import "../../utils/NSDataAdditions.h"
 
 NSString *const EVENT_SCANNER_RESOLVED = @"scannerResolved";
 NSString *const EVENT_SCANNER_RUNNING = @"scannerRunning";
@@ -152,7 +153,8 @@ NSString *const EVENT_SCANNER_RUNNING = @"scannerRunning";
     @try {
         BOOL isConnectSuccess = [[PrinterSDK defaultPrinterSDK] connectIP:host];
         !isConnectSuccess ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host] : nil;
-        [[PrinterSDK defaultPrinterSDK] sendHex:text];
+        NSData* payload = [NSData dataWithBase64EncodedString:text];
+        [[PrinterSDK defaultPrinterSDK] sendHex:[payload hexadecimalString]];
         successCallback(@[[NSString stringWithFormat:@"Sent to printer %@", host]]);
 
     } @catch (NSException *exception) {
