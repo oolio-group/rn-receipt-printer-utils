@@ -1,10 +1,9 @@
 //
 //  RNUSBPrinter.h
-//  RNThermalReceiptPrinter
 //
-//  Created by MTT on 06/12/19.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Created by Till POS on 14/09/21.
 //
+
 
 #ifndef RNUSBPrinter_h
 #define RNUSBPrinter_h

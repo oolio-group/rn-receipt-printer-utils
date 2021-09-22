@@ -1,10 +1,9 @@
 //
 //  RNBLEPrinter.h
-//  RNThermalReceiptPrinter
 //
-//  Created by MTT on 06/10/19.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Created by Till POS on 14/09/21.
 //
+
 #pragma once
 #ifndef RNBLEPrinter_h
 #define RNBLEPrinter_h
@@ -15,13 +14,11 @@
 #import <React/RCTBridgeModule.h>
 #endif
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "PrinterSDK.h"
 
 @interface RNBLEPrinter : NSObject <RCTBridgeModule>{
-    NSMutableArray* _printerArray;
-    NSObject* m_printer;
+    Epos2Printer *printer_;
 }
 @end
-
-
 
 #endif /* RNBLEPrinter_h */
