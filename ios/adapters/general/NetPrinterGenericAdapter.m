@@ -155,8 +155,8 @@ NSString *const EVENT_SCANNER_RUNNING = @"scannerRunning";
         !isConnectSuccess ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host] : nil;
         NSData* payload = [NSData dataWithBase64EncodedString:text];
         [[PrinterSDK defaultPrinterSDK] sendHex:[payload hexadecimalString]];
+        [[PrinterSDK defaultPrinterSDK] disconnect];
         successCallback(@[[NSString stringWithFormat:@"Sent to printer %@", host]]);
-
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
     }

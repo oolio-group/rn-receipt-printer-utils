@@ -32,25 +32,23 @@
     @try {
         int result = EPOS2_SUCCESS;
 
-        printer_ = [[Epos2Printer alloc] initWithPrinterSeries:1 lang:EPOS2_MODEL_ANK];
-        [printer_ setReceiveEventDelegate:self];
+        printer = [[Epos2Printer alloc] initWithPrinterSeries:1 lang:EPOS2_MODEL_ANK];
+        [printer setReceiveEventDelegate:self];
 
         NSString* target = [NSString stringWithFormat:@"BT:%@", bdAddress];
-        result = [printer_ connect:target timeout:5000];
+        result = [printer connect:target timeout:5000];
 
         if (result != EPOS2_SUCCESS) {
             [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", bdAddress];
         }
         NSData* payload = [NSData dataWithBase64EncodedString:text];
-        [printer_ addCommand:payload];
-        result = [printer_ sendData:5000];
+        [printer addCommand:payload];
+        result = [printer sendData:5000];
         if (result != EPOS2_SUCCESS) {
             [NSException raise:@"Print failed" format:@"Error occurred while printing"];
         }
         _successCallback = successCallback;
         _errorCallback = errorCallback;
-        [printer_ clearCommandBuffer];
-        [printer_ disconnect];
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
     }
@@ -67,6 +65,10 @@
     _successCallback = nil;
     _errorCallback = nil;
 
+    [printer endTransaction];
+    [printer disconnect];
+    [printer clearCommandBuffer];
+    [printer setReceiveEventDelegate:nil];
     return;
 }
 

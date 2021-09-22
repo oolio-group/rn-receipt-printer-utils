@@ -18,7 +18,7 @@
 #import "EpsonPrinterSDK.h"
 
 @interface BLEPrinterEpsonAdapter : NSObject {
-    Epos2Printer *printer_;
+    Epos2Printer *printer;
 }
 - (void) connectAndSend:(NSString *)bdAddress printRawData:(NSString *)text success:(RCTResponseSenderBlock)successCallback fail:(RCTResponseSenderBlock)errorCallback;
 @end

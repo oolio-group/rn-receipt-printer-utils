@@ -98,12 +98,30 @@
                 success:(RCTResponseSenderBlock)successCallback
                    fail:(RCTResponseSenderBlock)errorCallback {
     @try {
-        Printer* selectedPrinter = [Printer alloc];
-        [selectedPrinter setValue:bdAddress forKey:@"UUIDString"];
-        [[PrinterSDK defaultPrinterSDK] connectBT:selectedPrinter];
+        [[PrinterSDK defaultPrinterSDK] scanPrintersWithCompletion:^(Printer* printer){
+            [self->_printerArray addObject:printer];
+        }];
+        
+        __block BOOL found = NO;
+        __block Printer* selectedPrinter = nil;
+
+        [_printerArray enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop){
+            selectedPrinter = (Printer *)obj;
+            if ([bdAddress isEqualToString:(selectedPrinter.UUIDString)]) {
+                found = YES;
+                *stop = YES;
+            }
+        }];
+
+        if (found) {
+            [[PrinterSDK defaultPrinterSDK] connectBT:selectedPrinter];
+        } else {
+            [NSException raise:@"Invalid connection" format:@"connectPrinter: Can't connect to printer %@", bdAddress];
+        }
         
         NSData* payload = [NSData dataWithBase64EncodedString:text];
         [[PrinterSDK defaultPrinterSDK] sendHex:[payload hexadecimalString]];
+        [[PrinterSDK defaultPrinterSDK] disconnect];
         successCallback(@[[NSString stringWithFormat:@"Successfuly printed"]]);
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
