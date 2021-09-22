@@ -9,7 +9,7 @@
 
 #import "RNBLEPrinter.h"
 #import "adapters/epson/BLEPrinterEpsonAdapter.h"
-#import "adapters/general/BLEPrinterGenericAdapter.h"
+#import "adapters/generic/BLEPrinterGenericAdapter.h"
 #import "utils/NSDataAdditions.h"
 #import "utils/EpsonUtils.h"
 

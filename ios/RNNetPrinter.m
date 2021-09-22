@@ -7,7 +7,7 @@
 
 #import "RNNetPrinter.h"
 #import "adapters/epson/NetPrinterEpsonAdapter.h"
-#import "adapters/general/NetPrinterGenericAdapter.h"
+#import "adapters/generic/NetPrinterGenericAdapter.h"
 #import "utils/NSDataAdditions.h"
 #import "utils/EpsonUtils.h"
 

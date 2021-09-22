@@ -118,7 +118,6 @@ public class BLEPrinterAdapter implements PrinterAdapter{
             }
         }
         String errorText = "Can not find the specified printing device, please perform Bluetooth pairing in the system settings first.";
-        Toast.makeText(this.mContext, errorText, Toast.LENGTH_LONG).show();
         errorCallback.invoke(errorText);
         return;
     }
@@ -221,7 +220,6 @@ public class BLEPrinterAdapter implements PrinterAdapter{
         }
       }
       String errorText = "Can not find the specified printing device, please perform Bluetooth pairing in the system settings first.";
-      Toast.makeText(this.mContext, errorText, Toast.LENGTH_LONG).show();
       errorCallback.invoke(errorText);
       return;
     }
