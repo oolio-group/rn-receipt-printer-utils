@@ -14,10 +14,8 @@
 #import <React/RCTBridgeModule.h>
 #endif
 #import <CoreBluetooth/CoreBluetooth.h>
-#import "PrinterSDK.h"
 
 @interface RNBLEPrinter : NSObject <RCTBridgeModule>{
-    Epos2Printer *printer_;
 }
 @end
 

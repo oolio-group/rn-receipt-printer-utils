@@ -55,18 +55,6 @@ public class BLEPrinterAdapter implements PrinterAdapter{
     @Override
     public void init(ReactApplicationContext reactContext, Callback successCallback, Callback errorCallback) {
         this.mContext = reactContext;
-        BluetoothAdapter bluetoothAdapter = getBTAdapter();
-        if(bluetoothAdapter == null) {
-            errorCallback.invoke("No bluetooth adapter available");
-            return;
-        }
-        if(!bluetoothAdapter.isEnabled()) {
-            errorCallback.invoke("bluetooth adapter is not enabled");
-            return;
-        }else{
-            successCallback.invoke();
-        }
-
     }
 
     private static BluetoothAdapter getBTAdapter() {
@@ -130,7 +118,6 @@ public class BLEPrinterAdapter implements PrinterAdapter{
             }
         }
         String errorText = "Can not find the specified printing device, please perform Bluetooth pairing in the system settings first.";
-        Toast.makeText(this.mContext, errorText, Toast.LENGTH_LONG).show();
         errorCallback.invoke(errorText);
         return;
     }
@@ -188,9 +175,52 @@ public class BLEPrinterAdapter implements PrinterAdapter{
     @Override
     public void printByteData(byte[] rawBase64Data, Callback errorCallback) {
     }
-
+    
+    @Override
+    public void connectAndSend(String host, Integer port, String rawBase64Data, Callback successCallback, Callback errorCallback) {
+    }
 
     @Override
-    public void connectAndSend(String host, Integer port, String data, Callback successCallback, Callback errorCallback) {
+    public void connectAndSend(PrinterDeviceId printerDeviceId, String data, Callback successCallback, Callback errorCallback) {
+      BluetoothAdapter bluetoothAdapter = getBTAdapter();
+      if(bluetoothAdapter == null) {
+        errorCallback.invoke("No bluetooth adapter available");
+        return;
+      }
+      if (!bluetoothAdapter.isEnabled()) {
+        errorCallback.invoke("bluetooth is not enabled");
+        return;
+      }
+      BLEPrinterDeviceId blePrinterDeviceId = (BLEPrinterDeviceId)printerDeviceId;
+      if(this.mBluetoothDevice != null){
+        if(this.mBluetoothDevice.getAddress().equals(blePrinterDeviceId.getInnerMacAddress()) && this.mBluetoothSocket != null){
+          Log.v(LOG_TAG, "do not need to reconnect");
+          printRawData(data, errorCallback);
+          successCallback.invoke(new BLEPrinterDevice(this.mBluetoothDevice).toRNWritableMap());
+          return;
+        }else{
+          closeConnectionIfExists();
+        }
+      }
+      Set<BluetoothDevice> pairedDevices = getBTAdapter().getBondedDevices();
+
+      for (BluetoothDevice device : pairedDevices) {
+        if(device.getAddress().equals(blePrinterDeviceId.getInnerMacAddress())){
+
+          try{
+            connectBluetoothDevice(device);
+            printRawData(data, errorCallback);
+            successCallback.invoke(new BLEPrinterDevice(this.mBluetoothDevice).toRNWritableMap());
+            return;
+          }catch (IOException e){
+            e.printStackTrace();
+            errorCallback.invoke(e.getMessage());
+            return;
+          }
+        }
+      }
+      String errorText = "Can not find the specified printing device, please perform Bluetooth pairing in the system settings first.";
+      errorCallback.invoke(errorText);
+      return;
     }
 }

@@ -12,6 +12,8 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2E3C32CD26FA55E10069773D /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E3C32CC26FA55E10069773D /* ExternalAccessory.framework */; };
+		2E3C32CF26FA56240069773D /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E3C32CE26FA56240069773D /* libxml2.2.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +25,8 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ThermalReceiptPrinterExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ThermalReceiptPrinterExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ThermalReceiptPrinterExample/main.m; sourceTree = "<group>"; };
+		2E3C32CC26FA55E10069773D /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		2E3C32CE26FA56240069773D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		4D7192F03A36A017E887435B /* Pods-ThermalReceiptPrinterExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThermalReceiptPrinterExample.release.xcconfig"; path = "Target Support Files/Pods-ThermalReceiptPrinterExample/Pods-ThermalReceiptPrinterExample.release.xcconfig"; sourceTree = "<group>"; };
 		871719007ECC5EAD276C345C /* Pods-ThermalReceiptPrinterExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThermalReceiptPrinterExample.debug.xcconfig"; path = "Target Support Files/Pods-ThermalReceiptPrinterExample/Pods-ThermalReceiptPrinterExample.debug.xcconfig"; sourceTree = "<group>"; };
 		BCEA90A70F4BEAD7E9FA28B2 /* libPods-ThermalReceiptPrinterExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ThermalReceiptPrinterExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,6 +38,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E3C32CF26FA56240069773D /* libxml2.2.tbd in Frameworks */,
+				2E3C32CD26FA55E10069773D /* ExternalAccessory.framework in Frameworks */,
 				0D1336C0461A88D01186E375 /* libPods-ThermalReceiptPrinterExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,6 +73,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2E3C32CE26FA56240069773D /* libxml2.2.tbd */,
+				2E3C32CC26FA55E10069773D /* ExternalAccessory.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				BCEA90A70F4BEAD7E9FA28B2 /* libPods-ThermalReceiptPrinterExample.a */,
 			);

@@ -48,7 +48,7 @@ and comment out code related to Flipper in `ios/AppDelegate.m`
 | Printer    | Android            | IOS                |
 | ---------- | ------------------ | ------------------ |
 | USBPrinter | :x: |   :negative_squared_cross_mark:|
-| BLEPrinter | :x: | :x: |
+| BLEPrinter | :heavy_check_mark: | :heavy_check_mark: |
 | NetPrinter | :heavy_check_mark: | :heavy_check_mark: |
 
 ## Tested on following platforms (manual)
@@ -101,8 +101,8 @@ import {
   BLEPrinter,
 } from "@tillpos/rn-receipt-printer-utils";
 
-USBPrinter.printText("sample text");
-USBPrinter.printBill("sample bill");
+BLEPrinter.connectAndSend("xx-xx-xx-xx-xx", "<base64>", ()=>null, ()=>null);
+NetPrinter.connectAndSend("xx-xx-xx-xx-xx", 9100, "<base64>", ()=>null, ()=>null);
 ```
 
 ## Example
@@ -114,6 +114,7 @@ interface INetPrinter {
   device_name: string;
   host: string;
   port: number;
+  brand?: PrinterBrand;
 }
 ```
 
@@ -121,49 +122,31 @@ _Note:_ get list device for net printers is support scanning in local ip but not
 
 ```javascript
 
-  componentDidMount = () => {
-    NetPrinter.init().then(() => {
-      this.setState(Object.assign({}, this.state, {printers: [{host: '192.168.10.241', port: 9100}]}))
-      })
+  const printer = {
+    host: "192.168.10.24", 
+    port: 9100,
+    device_name: "Sample printer",
+    brand: PrinterBrand.EPSON
   }
-
-  _connectPrinter => (host, port) => {
+  _connectPrinter => () => {
     //connect printer
-    NetPrinter.connectPrinter(host, port).then(
-      (printer) => this.setState(Object.assign({}, this.state, {currentPrinter: printer})),
-      error => console.warn(error))
-}
-
-  printTextTest = () => {
-    if (this.state.currentPrinter) {
-      NetPrinter.printText("<C>sample text</C>\n");
-    }
+    await NetPrinter.connectAndSend(
+      printer.host, 
+      printer.port,
+      (printer) => console.log("Printed"),
+      error => console.warn(error)
+    )
   }
-
-  printBillTest = () => {
-    if(this.state.currentPrinter) {
-      NetPrinter.printBill("<C>sample bill</C>");
-    }
-  }
-
-  ...
 
   render() {
     return (
       <View style={styles.container}>
         {
-          this.state.printers.map(printer => (
-            <TouchableOpacity key={printer.device_id} onPress={(printer) => this._connectPrinter(printer.host, printer.port)}>
+            <TouchableOpacity onPress={(printer) => this._connectPrinter()}>
               {`device_name: ${printer.device_name}, host: ${printer.host}, port: ${printer.port}`}
             </TouchableOpacity>
             ))
         }
-        <TouchableOpacity onPress={() => this.printTextTest()}>
-          <Text> Print Text </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.printBillTest()}>
-          <Text> Print Bill Text </Text>
-        </TouchableOpacity>
       </View>
     )
   }
@@ -175,8 +158,8 @@ _Note:_ get list device for net printers is support scanning in local ip but not
 
 ## TODO
 
-- [ ] Update documentation
+- [x] Update documentation
 - [ ] Maintain Multiple connections
 - [ ] Use `release-it` to publish builds
-- [ ] Bluetooth support
+- [x] Bluetooth support
 - [ ] USB support
