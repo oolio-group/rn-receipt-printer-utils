@@ -10,6 +10,23 @@
 #import "GenericPrinterSDK.h"
 #import "../../utils/NSDataAdditions.h"
 
+@interface ExtendedPrinter : Printer
+
+@property (nonatomic, readwrite) NSString* name;
+@property (nonatomic, readwrite) NSString* UUIDString;
+
+@end
+
+@implementation ExtendedPrinter : Printer {
+    NSString* _UUIDString;
+}
+    @synthesize name;
+    @synthesize UUIDString = _UUIDString;
+    - (void) setUUIDString:(NSString *)value {
+        _UUIDString = value;
+    }
+@end
+
 @implementation BLEPrinterGenericAdapter
 
 - (dispatch_queue_t)methodQueue
@@ -113,15 +130,12 @@
             }
         }];
 
-        if (found) {
-            [[PrinterSDK defaultPrinterSDK] connectBT:selectedPrinter];
-        } else {
-            [NSException raise:@"Invalid connection" format:@"connectPrinter: Can't connect to printer %@", bdAddress];
-        }
+        ExtendedPrinter* extendedPrinter = (ExtendedPrinter*) [ExtendedPrinter alloc];
+        [extendedPrinter setUUIDString:bdAddress];
+        [[PrinterSDK defaultPrinterSDK] connectBT:extendedPrinter];
         
         NSData* payload = [NSData dataWithBase64EncodedString:text];
         [[PrinterSDK defaultPrinterSDK] sendHex:[payload hexadecimalString]];
-        [[PrinterSDK defaultPrinterSDK] disconnect];
         successCallback(@[[NSString stringWithFormat:@"Successfuly printed"]]);
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);

@@ -1134,8 +1134,6 @@ enum Epos2PrinterSettingPrintSpeed : int {
 @end
 
 @interface Epos2Printer: Epos2CommonPrinter
-+ (Epos2Printer*)defaultPrinterSDK;
-
 - (id) initWithPrinterSeries:(int)printerSeries lang:(int)lang;
 - (void) dealloc;
 
