@@ -1,13 +1,11 @@
 //
 //  RNUSBPrinter.m
-//  RNThermalReceiptPrinter
 //
-//  Created by MTT on 06/12/19.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Created by Till POS on 14/09/21.
 //
 
+
 #import "RNUSBPrinter.h"
-#import "PrinterSDK.h"
 
 @implementation RNUSBPrinter
 
@@ -17,36 +15,13 @@
 }
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(init:(RCTResponseSenderBlock)successCallback
-                  fail:(RCTResponseSenderBlock)errorCallback) {
-    // TODO
-    successCallback(@[@"Init successful"]);
-}
-
-RCT_EXPORT_METHOD(getDeviceList:(RCTResponseSenderBlock)successCallback
-                  fail:(RCTResponseSenderBlock)errorCallback) {
-    // TODO
-    NSMutableArray *printerArray = [NSMutableArray new];
-    successCallback(@[printerArray]);
-}
-
-RCT_EXPORT_METHOD(connectPrinter:(NSInteger)vendorId
+RCT_EXPORT_METHOD(connectAndSend:(NSInteger)vendorId
                   withProductID:(NSInteger)productId
+                  printRawData:(NSData *)text
                   success:(RCTResponseSenderBlock)successCallback
                   fail:(RCTResponseSenderBlock)errorCallback) {
     // TODO
     errorCallback(@[@"This function is not supported"]);
 }
-
-RCT_EXPORT_METHOD(printRawData:(NSString *)text
-                  fail:(RCTResponseSenderBlock)errorCallback) {
-    // TODO
-    errorCallback(@[@"This function is not supported"]);
-}
-
-RCT_EXPORT_METHOD(closeConn) {
-    // TODO
-}
-
 @end
 

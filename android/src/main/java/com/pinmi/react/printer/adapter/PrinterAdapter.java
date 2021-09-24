@@ -30,4 +30,5 @@ public interface PrinterAdapter {
 
     public void connectAndSend(String host, Integer port, String rawBase64Data, Callback successCallback, Callback errorCallback);
 
+    public void connectAndSend(PrinterDeviceId printerDeviceId, String data, Callback successCallback, Callback errorCallback);
 }

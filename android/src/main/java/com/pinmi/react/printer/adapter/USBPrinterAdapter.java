@@ -64,12 +64,10 @@ public class USBPrinterAdapter implements PrinterAdapter {
                         Log.i(LOG_TAG, "success to grant permission for device " + usbDevice.getDeviceId() + ", vendor_id: " + usbDevice.getVendorId() + " product_id: " + usbDevice.getProductId());
                         mUsbDevice = usbDevice;
                     } else {
-                        Toast.makeText(context, "User refuses to obtain USB device permissions" + usbDevice.getDeviceName(), Toast.LENGTH_LONG).show();
                     }
                 }
             } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
                 if (mUsbDevice != null) {
-                    Toast.makeText(context, "USB device has been turned off", Toast.LENGTH_LONG).show();
                     closeConnectionIfExists();
                 }
             } else if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(action) || UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
@@ -228,5 +226,9 @@ public class USBPrinterAdapter implements PrinterAdapter {
 
     @Override
     public void connectAndSend(String host, Integer port, String data, Callback successCallback, Callback errorCallback) {
+    }
+
+    @Override
+    public void connectAndSend(PrinterDeviceId printerDeviceId, String data, Callback successCallback, Callback errorCallback) {
     }
 }
