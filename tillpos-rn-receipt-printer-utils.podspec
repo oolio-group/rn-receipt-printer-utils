@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/hitz-group/rn-receipt-printer-utils.git", :tag => "v#{s.version}" }
   s.source_files  = "ios/**/*.{h,m}"
   s.requires_arc = true
-  s.ios.vendored_libraries = "ios/PrinterSDK/libEpsonPrinterSDK.a", "ios/PrinterSDK/libGenericPrinterSDK.a"
+  s.ios.vendored_libraries = "ios/PrinterSDK/libEpsonPrinterSDKarm64.a", "ios/PrinterSDK/libGenericPrinterSDK.a", "ios/PrinterSDK/libEpsonPrinterSDKx8664.a"
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => '"${PROJECT_DIR}/PrinterSDK"/**' }
 
   s.dependency 'React'
