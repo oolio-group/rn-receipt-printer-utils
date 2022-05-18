@@ -12,7 +12,7 @@
 
 - (dispatch_queue_t)methodQueue
 {
-    return dispatch_get_main_queue();
+    return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
 }
 
 - (void) connectAndSend:(NSString *)host
