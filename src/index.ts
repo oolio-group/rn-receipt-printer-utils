@@ -8,6 +8,7 @@ export enum PrinterBrand {
   EPSON = 'EPSON',
   STAR = 'STAR',
   OTHER = 'OTHER',
+  SNBC = 'SNBC',
 }
 
 export interface PrinterOptions {

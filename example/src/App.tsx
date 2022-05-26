@@ -1,16 +1,19 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { NetPrinter, PrinterBrand } from '@tillpos/rn-receipt-printer-utils';
+import {
+  // NetPrinter,
+  PrinterBrand,
+  BLEPrinter,
+} from '@tillpos/rn-receipt-printer-utils';
 import { Buffer } from 'buffer';
 import React, { Fragment, useCallback } from 'react';
 
 interface Printer {
   device_name: string;
-  host: string;
-  port: number;
+  bdAddress: string;
 }
 const PRINTERS: Array<Printer> = [
-  { device_name: 'P1', host: '192.168.0.8', port: 9100 },
-  { device_name: 'P2', host: '192.168.0.9', port: 9100 },
+  { device_name: 'P1', bdAddress: 'A0:E6:F8:26:62:38' },
+  // { device_name: 'P2', host: '10.15.0.160', port: 9100 }, works ok
 ];
 
 export default function App() {
@@ -20,11 +23,10 @@ export default function App() {
     try {
       await Promise.all(
         PRINTERS.map(async (printer) => {
-          return await NetPrinter.connectAndSend(
-            printer.host,
-            printer.port,
+          return await BLEPrinter.connectAndSend(
+            printer.bdAddress,
             buffer,
-            PrinterBrand.EPSON
+            PrinterBrand.SNBC
           );
         })
       );
