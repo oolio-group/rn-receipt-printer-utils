@@ -62,10 +62,10 @@
     _successCallback = nil;
     _errorCallback = nil;
 
-    [printer endTransaction];
-    [printer disconnect];
-    [printer clearCommandBuffer];
-    [printer setReceiveEventDelegate:nil];
+    [printerObj endTransaction];
+    [printerObj disconnect];
+    [printerObj clearCommandBuffer];
+    [printerObj setReceiveEventDelegate:nil];
     return;
 }
 
