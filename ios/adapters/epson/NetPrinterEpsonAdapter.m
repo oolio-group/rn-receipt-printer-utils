@@ -30,6 +30,7 @@
                    fail:(RCTResponseSenderBlock)errorCallback {
     @try {
         int result = EPOS2_SUCCESS;
+        Epos2Printer *printer;
         printer = [[Epos2Printer alloc] initWithPrinterSeries:1 lang:EPOS2_MODEL_ANK];
         [printer setReceiveEventDelegate:self];
 
@@ -62,10 +63,10 @@
     _successCallback = nil;
     _errorCallback = nil;
 
-    [printer endTransaction];
-    [printer disconnect];
-    [printer clearCommandBuffer];
-    [printer setReceiveEventDelegate:nil];
+    [printerObj endTransaction];
+    [printerObj disconnect];
+    [printerObj clearCommandBuffer];
+    [printerObj setReceiveEventDelegate:nil];
     return;
 }
 
