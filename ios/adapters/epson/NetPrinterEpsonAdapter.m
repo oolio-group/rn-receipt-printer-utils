@@ -42,12 +42,10 @@
           @try{
             _retryAttempts++;
             [self connectAndSendAux:host printRawData:text success:successCallback fail:errorCallback];
-            NSLog(@"succeed for printer %@ on attempt %i",host,_retryAttempts);
             _retryAttempts = 3;
           }
           @catch (NSException *exception)
           {
-             NSLog(@"retry attempt %i, printer %@",_retryAttempts,host);
              if (_retryAttempts>=3)
              {
                @throw exception;
@@ -76,29 +74,19 @@
         int result = EPOS2_SUCCESS;
         result = [printer connect:target timeout:5000];
         if (result != EPOS2_SUCCESS) {
-             NSLog(@"failing at connect,attempt %i, printer %@",_retryAttempts,host);
             [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host];
 
 
         }
 
-       int r = arc4random_uniform(100);
-
-       if(r < 50)
-       {
-         NSLog(@"failing at sim,attempt %i, printer %@",_retryAttempts,host);
-        [NSException raise:@"test fail connection" format:@"sim dropout for %@", host];
-       }
 
         NSData* payload = [NSData dataWithBase64EncodedString:text];
         [printer addCommand:payload];
         result = [printer sendData:5000];
         if (result != EPOS2_SUCCESS) {
-             NSLog(@"failing at print,attempt %i, printer %@,result %i", _retryAttempts,host,result);
             [NSException raise:@"Print failed" format:@"Error occurred while printing"];
 
         }
-        NSLog(@"print success for %@, printer obj pointer %p",host,printer);
         _successCallback = successCallback;
         _errorCallback = errorCallback;
 
