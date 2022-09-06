@@ -12,6 +12,7 @@
 #import <stdlib.h>
 
 @interface NetPrinterEpsonAdapter() <Epos2PtrReceiveDelegate>
+- (void) connectAndSendAux:(NSString *_Nullable)host printRawData: (NSString *_Nullable)text success:(RCTResponseSenderBlock _Nullable )successCallback fail:(RCTResponseSenderBlock _Nullable )errorCallback;
 @end
 
 @implementation NetPrinterEpsonAdapter {

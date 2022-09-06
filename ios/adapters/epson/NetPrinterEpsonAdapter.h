@@ -12,6 +12,5 @@
     Epos2Printer *printer;
 }
 - (void) connectAndSend:(NSString *_Nullable)host withPort:(nonnull NSNumber *)port printRawData:(NSString *_Nullable)text success:(RCTResponseSenderBlock _Nullable )successCallback fail:(RCTResponseSenderBlock _Nullable )errorCallback;
-- (void) connectAndSendAux:(NSString *_Nullable)host printRawData: (NSString *_Nullable)text success:(RCTResponseSenderBlock _Nullable )successCallback fail:(RCTResponseSenderBlock _Nullable )errorCallback;
 
 @end
