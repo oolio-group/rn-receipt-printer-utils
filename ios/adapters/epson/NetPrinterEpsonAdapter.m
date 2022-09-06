@@ -9,13 +9,16 @@
 #import "EpsonPrinterSDK.h"
 #import "../../utils/NSDataAdditions.h"
 #import "../../utils/EpsonUtils.h"
+#import <stdlib.h>
 
 @interface NetPrinterEpsonAdapter() <Epos2PtrReceiveDelegate>
+- (void) connectAndSendAux:(NSString *_Nullable)host printRawData: (NSString *_Nullable)text success:(RCTResponseSenderBlock _Nullable )successCallback fail:(RCTResponseSenderBlock _Nullable )errorCallback;
 @end
 
 @implementation NetPrinterEpsonAdapter {
     RCTResponseSenderBlock _successCallback;
     RCTResponseSenderBlock _errorCallback;
+    int _retryAttempts;
 }
 
 - (dispatch_queue_t)methodQueue
@@ -29,28 +32,66 @@
                 success:(RCTResponseSenderBlock)successCallback
                    fail:(RCTResponseSenderBlock)errorCallback {
     @try {
-        int result = EPOS2_SUCCESS;
+
+
+        _retryAttempts=0;
+
+
         printer = [[Epos2Printer alloc] initWithPrinterSeries:1 lang:EPOS2_MODEL_ANK];
         [printer setReceiveEventDelegate:self];
+        do{
+          @try{
+            _retryAttempts++;
+            [self connectAndSendAux:host printRawData:text success:successCallback fail:errorCallback];
+            _retryAttempts = 3;
+          }
+          @catch (NSException *exception)
+          {
+             if (_retryAttempts>=3)
+             {
+               @throw exception;
+             }
+             [printer endTransaction];
+             [printer disconnect];
+             [printer clearCommandBuffer];
+          }
+        }
+        while(_retryAttempts<3);
 
+
+
+    } @catch (NSException *exception) {
+
+          [printer endTransaction];
+          [printer disconnect];
+          [printer clearCommandBuffer];
+          [printer setReceiveEventDelegate:nil];
+          errorCallback(@[exception.reason]);
+    }
+}
+
+- (void) connectAndSendAux:(NSString *)host printRawData:(NSString *)text success:(RCTResponseSenderBlock)successCallback fail:(RCTResponseSenderBlock)errorCallback {
         NSString* target = [NSString stringWithFormat:@"TCP:%@", host];
+        int result = EPOS2_SUCCESS;
         result = [printer connect:target timeout:5000];
         if (result != EPOS2_SUCCESS) {
             [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host];
+
+
         }
+
+
         NSData* payload = [NSData dataWithBase64EncodedString:text];
         [printer addCommand:payload];
         result = [printer sendData:5000];
         if (result != EPOS2_SUCCESS) {
             [NSException raise:@"Print failed" format:@"Error occurred while printing"];
+
         }
         _successCallback = successCallback;
         _errorCallback = errorCallback;
-    } @catch (NSException *exception) {
-        errorCallback(@[exception.reason]);
-    }
-}
 
+}
 - (void) onPtrReceive:(Epos2Printer *)printerObj code:(int)code status:(Epos2PrinterStatusInfo *)status printJobId:(NSString *)printJobId
 {
     NSString *errMsg = [EpsonUtils makeErrorMessage:status];
@@ -59,12 +100,15 @@
     } else {
         _errorCallback != nil ? _errorCallback(@[[NSString stringWithString:errMsg]]) : nil;
     }
+
     _successCallback = nil;
     _errorCallback = nil;
 
+
+
     [printerObj endTransaction];
-    [printerObj disconnect];
     [printerObj clearCommandBuffer];
+    [printerObj disconnect];
     [printerObj setReceiveEventDelegate:nil];
     return;
 }

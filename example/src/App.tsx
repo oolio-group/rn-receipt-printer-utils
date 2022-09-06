@@ -9,18 +9,23 @@ interface Printer {
   port: number;
 }
 const PRINTERS: Array<Printer> = [
-  { device_name: 'P1', host: '192.168.0.8', port: 9100 },
-  { device_name: 'P2', host: '192.168.0.9', port: 9100 },
+  { device_name: 'P1', host: '10.15.0.93', port: 9100 },
+  { device_name: 'P2', host: '10.15.0.174', port: 9100 },
 ];
+
+let globalCount = 0;
 
 export default function App() {
   const testPrint = useCallback(async () => {
-    const buffer = Buffer.from('Minions MinionsMinions \n');
-
+    globalCount++;
+    const buffer = Buffer.from(
+      globalCount + ' ::: minions minions minions \n \n '
+    );
     try {
-      await Promise.all(
+      await Promise.allSettled(
         PRINTERS.map(async (printer) => {
-          return await NetPrinter.connectAndSend(
+          console.log('sending data to;' + printer.host);
+          return NetPrinter.connectAndSend(
             printer.host,
             printer.port,
             buffer,
