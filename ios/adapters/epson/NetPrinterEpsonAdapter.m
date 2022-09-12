@@ -54,6 +54,7 @@
              [printer endTransaction];
              [printer disconnect];
              [printer clearCommandBuffer];
+             [NSThread sleepForTimeInterval:3.0f];
           }
         }
         while(_retryAttempts<3);
@@ -63,19 +64,19 @@
     } @catch (NSException *exception) {
 
           [printer endTransaction];
-          [printer disconnect];
+          int failResult=[printer disconnect];
           [printer clearCommandBuffer];
           [printer setReceiveEventDelegate:nil];
-          errorCallback(@[exception.reason]);
+          errorCallback(@[[NSString stringWithFormat:@"%@ and disconnect code %i",exception.reason,failResult]]);
     }
 }
 
 - (void) connectAndSendAux:(NSString *)host printRawData:(NSString *)text success:(RCTResponseSenderBlock)successCallback fail:(RCTResponseSenderBlock)errorCallback {
         NSString* target = [NSString stringWithFormat:@"TCP:%@", host];
         int result = EPOS2_SUCCESS;
-        result = [printer connect:target timeout:5000];
+        result = [printer connect:target timeout:(_retryAttempts * 3000)];
         if (result != EPOS2_SUCCESS) {
-            [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host];
+            [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@, ERROR code: %i", host,result];
 
 
         }
@@ -95,20 +96,18 @@
 - (void) onPtrReceive:(Epos2Printer *)printerObj code:(int)code status:(Epos2PrinterStatusInfo *)status printJobId:(NSString *)printJobId
 {
     NSString *errMsg = [EpsonUtils makeErrorMessage:status];
-    if ([errMsg  isEqual: @""]) {
+    [printerObj endTransaction];
+    [printerObj clearCommandBuffer];
+    int result = [printerObj disconnect];
+    if ([errMsg  isEqual: @""] && result == EPOS2_SUCCESS) {
         _successCallback != nil ? _successCallback(@[[NSString stringWithFormat:@"Successfuly printed"]]) : nil;
     } else {
-        _errorCallback != nil ? _errorCallback(@[[NSString stringWithString:errMsg]]) : nil;
+        _errorCallback != nil ? _errorCallback(@[[NSString stringWithFormat:@"Delegate with ERROR %i and message %@",result,errMsg]]) : nil;
     }
 
     _successCallback = nil;
     _errorCallback = nil;
 
-
-
-    [printerObj endTransaction];
-    [printerObj clearCommandBuffer];
-    [printerObj disconnect];
     [printerObj setReceiveEventDelegate:nil];
     return;
 }
