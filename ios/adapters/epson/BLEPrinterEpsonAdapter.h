@@ -20,7 +20,7 @@
 @interface BLEPrinterEpsonAdapter : NSObject {
     Epos2Printer *printer;
 }
-- (void) connectAndSend:(NSString *)bdAddress printRawData:(NSString *)text success:(RCTResponseSenderBlock)successCallback fail:(RCTResponseSenderBlock)errorCallback;
+- (void) connectAndSend:(NSString *)bdAddress printRawData:(NSString *)text epsonModel:(int)modelNumber success:(RCTResponseSenderBlock)successCallback fail:(RCTResponseSenderBlock)errorCallback;
 @end
 
 #endif /* BLEPrinterEpsonAdapter_h */

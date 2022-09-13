@@ -26,11 +26,12 @@
 - (void) connectAndSend:(NSString *)host
                withPort:(nonnull NSNumber *)port
            printRawData:(NSString *)text
+              epsonModel:(int)modelNumber
                 success:(RCTResponseSenderBlock)successCallback
                    fail:(RCTResponseSenderBlock)errorCallback {
     @try {
         int result = EPOS2_SUCCESS;
-        printer = [[Epos2Printer alloc] initWithPrinterSeries:1 lang:EPOS2_MODEL_ANK];
+        printer = [[Epos2Printer alloc] initWithPrinterSeries:modelNumber lang:EPOS2_MODEL_ANK];
         [printer setReceiveEventDelegate:self];
 
         NSString* target = [NSString stringWithFormat:@"TCP:%@", host];

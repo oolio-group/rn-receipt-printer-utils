@@ -24,12 +24,32 @@ RCT_EXPORT_METHOD(connectAndSend:(NSString *)host
                   withPort:(nonnull NSNumber *)port
                   printRawData:(NSString *)text
                   brand:(NSString *)brand
+                  series:(NSString *)series
                   success:(RCTResponseSenderBlock)successCallback
                   fail:(RCTResponseSenderBlock)errorCallback) {
     @try {
+        int number;
+        if ([series isEqual:@"TM_M30"]){
+            number = 1;
+        }
+        else if ([series isEqual:@"TM_M30II"]){
+            number = 21;
+        }
+        else if ([series isEqual:@"TM_U220"]){
+            number = 15;
+        }
+        else if ([series isEqual:@"TM_T82"]){
+            number = 10;
+        }
+        else if ([series isEqual:@"TM_L90"]){
+            number = 17;
+        }
+        else {
+            number = 1;
+        }
         if ([brand  isEqual: @"EPSON"]) {
             NetPrinterEpsonAdapter *adapter = [NetPrinterEpsonAdapter alloc];
-            [adapter connectAndSend:host withPort:port printRawData:text success:successCallback fail:errorCallback];
+            [adapter connectAndSend:host withPort:port printRawData:text epsonModel:&number success:successCallback fail:errorCallback];
         }
         else {
             NetPrinterGenericAdapter *adapter = [NetPrinterGenericAdapter alloc];

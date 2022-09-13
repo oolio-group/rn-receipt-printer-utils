@@ -1,5 +1,9 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { NetPrinter, PrinterBrand } from '@tillpos/rn-receipt-printer-utils';
+import {
+  NetPrinter,
+  PrinterBrand,
+  PrinterSeries,
+} from '@tillpos/rn-receipt-printer-utils';
 import { Buffer } from 'buffer';
 import React, { Fragment, useCallback } from 'react';
 
@@ -24,7 +28,8 @@ export default function App() {
             printer.host,
             printer.port,
             buffer,
-            PrinterBrand.EPSON
+            PrinterBrand.EPSON,
+            PrinterSeries.TM_M30
           );
         })
       );
