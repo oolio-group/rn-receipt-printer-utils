@@ -13,28 +13,33 @@ interface Printer {
   port: number;
 }
 const PRINTERS: Array<Printer> = [
-  { device_name: 'P1', host: '192.168.0.8', port: 9100 },
-  { device_name: 'P2', host: '192.168.0.9', port: 9100 },
+  { device_name: 'P1', host: '10.15.0.78', port: 9100 },
+  { device_name: 'P2', host: '10.15.0.174', port: 9100 },
 ];
+
+let globalCount = 0;
 
 export default function App() {
   const testPrint = useCallback(async () => {
-    const buffer = Buffer.from('Minions MinionsMinions \n');
-
-    try {
-      await Promise.all(
-        PRINTERS.map(async (printer) => {
-          return await NetPrinter.connectAndSend(
-            printer.host,
-            printer.port,
-            buffer,
-            PrinterBrand.EPSON,
-            PrinterSeries.TM_M30
-          );
-        })
-      );
-    } catch (err) {
-      console.log('error', err);
+    globalCount++;
+    const buffer = Buffer.from(
+      globalCount + ' ::: minions minions minions \n \n '
+    );
+    for (let i = 0; i < 100; i++) {
+      let spont: number = Math.floor(Math.random() * PRINTERS.length);
+      const printer = PRINTERS[spont];
+      try {
+        console.log('sending data to;' + printer.host);
+        await NetPrinter.connectAndSend(
+          printer.host,
+          printer.port,
+          buffer,
+          PrinterBrand.EPSON,
+          PrinterSeries.TM_M30
+        );
+      } catch (err) {
+        console.log('error', err);
+      }
     }
   }, []);
 

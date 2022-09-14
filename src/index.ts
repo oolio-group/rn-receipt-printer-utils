@@ -45,7 +45,7 @@ export interface INetPrinter extends IBasePrinter {
 }
 
 // Timeout for returning response to client
-const SDK_RESPONSE_TIMEOUT = 5000;
+const SDK_RESPONSE_TIMEOUT = 30000;
 
 // Promise with timeout
 const promiseWithTimeout = <T>(
