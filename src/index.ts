@@ -10,7 +10,7 @@ export enum PrinterBrand {
   OTHER = 'OTHER',
 }
 
-export declare enum PrinterSeries {
+export enum PrinterSeries {
   TM_M30 = 'TM_M30',
   TM_M30II = 'TM_M30II',
   TM_U220 = 'TM_U220',

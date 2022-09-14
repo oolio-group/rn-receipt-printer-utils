@@ -49,7 +49,7 @@ RCT_EXPORT_METHOD(connectAndSend:(NSString *)host
         }
         if ([brand  isEqual: @"EPSON"]) {
             NetPrinterEpsonAdapter *adapter = [NetPrinterEpsonAdapter alloc];
-            [adapter connectAndSend:host withPort:port printRawData:text epsonModel:&number success:successCallback fail:errorCallback];
+            [adapter connectAndSend:host withPort:port printRawData:text epsonModel:number success:successCallback fail:errorCallback];
         }
         else {
             NetPrinterGenericAdapter *adapter = [NetPrinterGenericAdapter alloc];
