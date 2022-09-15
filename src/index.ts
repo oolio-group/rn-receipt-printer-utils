@@ -10,6 +10,13 @@ export enum PrinterBrand {
   OTHER = 'OTHER',
 }
 
+export enum PrinterSeries {
+  TM_M30 = 'TM_M30',
+  TM_M30II = 'TM_M30II',
+  TM_U220 = 'TM_U220',
+  TM_T82 = 'TM_T82',
+  TM_L90 = 'TM_L90',
+}
 export interface PrinterOptions {
   beep?: boolean;
   cut?: boolean;
@@ -20,6 +27,7 @@ export interface PrinterOptions {
 export interface IBasePrinter {
   device_name: string;
   brand?: PrinterBrand;
+  series?: PrinterSeries;
 }
 
 export interface IUSBPrinter extends IBasePrinter {
@@ -83,7 +91,8 @@ export const BLEPrinter = {
   connectAndSend: (
     bdAddress: string,
     data: Buffer,
-    brand: PrinterBrand
+    brand: PrinterBrand,
+    series: PrinterSeries
   ): Promise<IBLEPrinter> => {
     const { promiseOrTimeout, timeoutId } = promiseWithTimeout<IBLEPrinter>(
       new Promise((resolve, reject) =>
@@ -91,6 +100,7 @@ export const BLEPrinter = {
           bdAddress,
           data.toString('base64'),
           brand,
+          series,
           (printer: IBLEPrinter) => resolve(printer),
           (error: Error) => reject(error)
         )
@@ -110,7 +120,8 @@ export const NetPrinter = {
     host: string,
     port: number,
     data: Buffer,
-    brand: PrinterBrand
+    brand: PrinterBrand,
+    series: PrinterSeries
   ): Promise<INetPrinter> => {
     const { promiseOrTimeout, timeoutId } = promiseWithTimeout<INetPrinter>(
       new Promise((resolve, reject) =>
@@ -119,6 +130,7 @@ export const NetPrinter = {
           port,
           data.toString('base64'),
           brand,
+          series,
           (printer: INetPrinter) => resolve(printer),
           (error: Error) => reject(error)
         )
