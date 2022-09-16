@@ -11,7 +11,8 @@
   "dependencies": {
     "buffer": "^6.0.3",
     "react": "16.13.1",
-    "react-native": "0.63.2"
+    "react-native": "0.63.2",
+    "react-native-star-io10": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",

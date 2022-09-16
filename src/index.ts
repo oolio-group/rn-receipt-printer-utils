@@ -1,4 +1,5 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
+import { StarUtil } from './star';
 
 const RNUSBPrinter = NativeModules.RNUSBPrinter;
 const RNBLEPrinter = NativeModules.RNBLEPrinter;
@@ -87,13 +88,21 @@ export const BLEPrinter = {
   ): Promise<IBLEPrinter> => {
     const { promiseOrTimeout, timeoutId } = promiseWithTimeout<IBLEPrinter>(
       new Promise((resolve, reject) =>
-        RNBLEPrinter.connectAndSend(
-          bdAddress,
-          data.toString('base64'),
-          brand,
-          (printer: IBLEPrinter) => resolve(printer),
-          (error: Error) => reject(error)
-        )
+        brand === PrinterBrand.STAR
+          ? StarUtil.connectAndSend(
+              bdAddress,
+              data,
+              false,
+              (printer: IBLEPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
+          : RNBLEPrinter.connectAndSend(
+              bdAddress,
+              data.toString('base64'),
+              brand,
+              (printer: IBLEPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
       )
     );
     return new Promise((resolve, reject) =>
@@ -114,14 +123,22 @@ export const NetPrinter = {
   ): Promise<INetPrinter> => {
     const { promiseOrTimeout, timeoutId } = promiseWithTimeout<INetPrinter>(
       new Promise((resolve, reject) =>
-        RNNetPrinter.connectAndSend(
-          host,
-          port,
-          data.toString('base64'),
-          brand,
-          (printer: INetPrinter) => resolve(printer),
-          (error: Error) => reject(error)
-        )
+        brand === PrinterBrand.STAR
+          ? StarUtil.connectAndSend(
+              host,
+              data,
+              true,
+              (printer: INetPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
+          : RNNetPrinter.connectAndSend(
+              host,
+              port,
+              data.toString('base64'),
+              brand,
+              (printer: INetPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
       )
     );
     return new Promise((resolve, reject) =>
