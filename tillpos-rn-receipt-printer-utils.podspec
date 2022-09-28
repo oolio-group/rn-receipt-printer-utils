@@ -19,4 +19,5 @@ Pod::Spec.new do |s|
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => '"${PROJECT_DIR}/PrinterSDK"/**' }
 
   s.dependency 'React'
+  s.dependency 'CocoaAsyncSocket'
 end
