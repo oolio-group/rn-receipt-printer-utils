@@ -16,16 +16,57 @@
 @interface NetPrinterSunmiAdapter()<GCDAsyncSocketDelegate>
 {
     NSString *ipString;
+    NSErr1
 }
-@property (nonatomic, strong) GCDAsyncUdpSocket      *udpSocketClient;
-@property (nonatomic, strong) NSTimer                  *broadcastTimer;
-@property (nonatomic, strong) NSMutableArray         *detectedIpArray;
-@property (nonatomic, strong) NSThread               *timerThread;
-@property (nonatomic, copy) NSDictionary           *connectingRouterDeviceInfo;//当前已连接的路由器设备
-@property (nonatomic, copy) NSDictionary           *connectingIPCDeviceInfo;   //当前已连接的IPC设备
-@property (nonatomic, copy) void(^resultBlcok)(NSArray *resultDict);
 @property (nonatomic, strong) dispatch_source_t timer; //定时器
 @property (nonatomic, strong) GCDAsyncSocket *tcpSocketConnect;
 @property (nonatomic, copy)  IPConnectDeviceBlock connectionBlock;
 
 @end
+
+@implementation NetPrinterSunmiAdapter
+
+- (dispatch_queue_t)methodQueue
+{
+    return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+}
+
+- (void)connectSocketWithIP:(NSString *)ip completeBlock:(IPConnectDeviceBlock)completeBlock {
+    self.connectionBlock = completeBlock;
+    [self.tcpSocketConnect connectToHost:ip onPort:9100 error:nil];
+}
+
+#pragma mark - GCDAsyncSocketDelegate
+
+- (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
+
+    NSLog(@"TCP connected to host: %@ port: %d", host, port);
+    if (self.connectionBlock) {
+        self.connectionBlock(PRINTER_SUCCESS);
+    }
+}
+
+- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err {
+    NSLog(@"Disconnected from socket with error: %@", err);
+    if (self.connectionBlock) {
+        err != nil? self.connectionBlock(PRINTER_ILLEGAL) : seld.connectionBlock(PRINTER_DISCONNECT)
+    }
+}
+
+// MARK： 写数据
+- (void)controlDevicePrintingData:(NSData *)ipData {
+    [self.tcpSocketConnect writeData:ipData withTimeout:10 tag:100];
+}
+
+// MARK: 读数据
+-(void)readDataFromSocketWithTag: (NSInteger)tag {
+    [self.tcpSocketConnect readDataWithTimeout:-1 tag:tag];
+}
+#pragma mark - Getters
+- (GCDAsyncSocket *)tcpSocketConnect {
+    if (!_tcpSocketConnect) {
+        _tcpSocketConnect = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:methodQueue()];
+    }
+
+    return _tcpSocketConnect;
+}
