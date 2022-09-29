@@ -16,7 +16,8 @@
 @interface NetPrinterSunmiAdapter()<GCDAsyncSocketDelegate>
 {
     NSString *ipString;
-    NSErr1
+    RCTResponseSenderBlock _successCallback;
+    RCTResponseSenderBlock _errorCallback;
 }
 @property (nonatomic, strong) dispatch_source_t timer; //定时器
 @property (nonatomic, strong) GCDAsyncSocket *tcpSocketConnect;
@@ -31,9 +32,31 @@
     return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
 }
 
-- (void)connectSocketWithIP:(NSString *)ip completeBlock:(IPConnectDeviceBlock)completeBlock {
-    self.connectionBlock = completeBlock;
-    [self.tcpSocketConnect connectToHost:ip onPort:9100 error:nil];
+
+- (void) connectAndSend:(NSString *)host
+               withPort:(nonnull NSNumber *)port
+           printRawData:(NSString *)text
+                success:(RCTResponseSenderBlock)successCallback
+                   fail:(RCTResponseSenderBlock)errorCallback {
+
+    @try {
+        BOOL isConnectSuccess = [self connectSocketWithIP:host];
+        !isConnectSuccess ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host] : nil;
+         _successCallback= successCallback;
+         _errorCallback= errorCallback;
+        NSData* payload = [NSData dataWithBase64EncodedString:text];
+        NSString* hexData = [payload hexadecimalString];
+        [self controlDevicePrintingData:hexData];
+        [self.tcpSocketConnect disconnectAfterWriting];
+    } @catch (NSException *exception) {
+        errorCallback(@[exception.reason]);
+    }
+}
+
+
+- (BOOL)connectSocketWithIP:(NSString *)ip  {
+
+    return [self.tcpSocketConnect connectToHost:ip onPort:9100 error:nil];
 }
 
 #pragma mark - GCDAsyncSocketDelegate
@@ -41,16 +64,24 @@
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
 
     NSLog(@"TCP connected to host: %@ port: %d", host, port);
-    if (self.connectionBlock) {
-        self.connectionBlock(PRINTER_SUCCESS);
-    }
+
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err {
     NSLog(@"Disconnected from socket with error: %@", err);
-    if (self.connectionBlock) {
-        err != nil? self.connectionBlock(PRINTER_ILLEGAL) : seld.connectionBlock(PRINTER_DISCONNECT)
+
+      if (err!= nil)
+      {
+        _errorCallback != nil ? _errorCallback(@[[NSString stringWithFormat:@"Delegate with ERROR"]]) : nil;
+
+    } else {
+       _successCallback != nil ? _successCallback(@[[NSString stringWithFormat:@"Successfuly printed"]]) : nil;
     }
+
+    _successCallback = nil;
+    _errorCallback = nil;
+    [self._tcpSocketConnect setDelegate: nil];
+    [self._tcpSocketConnect release];
 }
 
 // MARK： 写数据
