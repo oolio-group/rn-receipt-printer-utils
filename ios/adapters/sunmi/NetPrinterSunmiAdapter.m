@@ -19,9 +19,9 @@
     RCTResponseSenderBlock _successCallback;
     RCTResponseSenderBlock _errorCallback;
 }
-@property (nonatomic, strong) dispatch_source_t timer; //定时器
+
 @property (nonatomic, strong) GCDAsyncSocket *tcpSocketConnect;
-@property (nonatomic, copy)  IPConnectDeviceBlock connectionBlock;
+
 
 @end
 
@@ -45,8 +45,7 @@
          _successCallback= successCallback;
          _errorCallback= errorCallback;
         NSData* payload = [NSData dataWithBase64EncodedString:text];
-        NSString* hexData = [payload hexadecimalString];
-        [self controlDevicePrintingData:hexData];
+        [self controlDevicePrintingData:payload];
         [self.tcpSocketConnect disconnectAfterWriting];
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
@@ -80,8 +79,7 @@
 
     _successCallback = nil;
     _errorCallback = nil;
-    [self._tcpSocketConnect setDelegate: nil];
-    [self._tcpSocketConnect release];
+    [self.tcpSocketConnect setDelegate: nil];
 }
 
 // MARK： 写数据
@@ -96,8 +94,10 @@
 #pragma mark - Getters
 - (GCDAsyncSocket *)tcpSocketConnect {
     if (!_tcpSocketConnect) {
-        _tcpSocketConnect = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:methodQueue()];
+        _tcpSocketConnect = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.methodQueue];
     }
 
     return _tcpSocketConnect;
 }
+
+@end

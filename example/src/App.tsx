@@ -13,7 +13,7 @@ interface Printer {
   port: number;
 }
 const PRINTERS: Array<Printer> = [
-  { device_name: 'P1', host: '10.15.0.78', port: 9100 },
+  { device_name: 'P1', host: '10.15.0.81', port: 9100 },
   { device_name: 'P2', host: '10.15.0.174', port: 9100 },
 ];
 
@@ -34,7 +34,7 @@ export default function App() {
           printer.host,
           printer.port,
           buffer,
-          PrinterBrand.EPSON,
+          PrinterBrand.SUNMI,
           PrinterSeries.TM_M30
         );
       } catch (err) {
