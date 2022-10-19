@@ -20,7 +20,7 @@
     RCTResponseSenderBlock _errorCallback;
 }
 
-@property (nonatomic, strong) GCDAsyncSocket *tcpSocketConnect;
+@property (nonatomic, strong) GCDAsyncSocket* tcpSocketConnect;
 
 
 @end
@@ -40,16 +40,38 @@
                    fail:(RCTResponseSenderBlock)errorCallback {
 
     @try {
+        if (!self.tcpSocketConnect) {
+            self.tcpSocketConnect = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
+        }
         BOOL isConnectSuccess = [self connectSocketWithIP:host];
+         NSLog(@"TCP connected to host: %d,",isConnectSuccess);
         !isConnectSuccess ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host] : nil;
          _successCallback= successCallback;
          _errorCallback= errorCallback;
-        NSData* payload = [NSData dataWithBase64EncodedString:text];
-        [self controlDevicePrintingData:payload];
-        [self.tcpSocketConnect disconnectAfterWriting];
+        Byte byteArr1[16] = {0x1D, 0x28 ,0x45, 0x03, 0x00, 0x06, 0x03, 0x01};
+        Byte byteArr2[4] = {0x0a, 0x0a, 0x0a, 0x0a};
+        NSData *data2 = nil;
+        data2 = [text dataUsingEncoding:NSUTF8StringEncoding];
+        NSMutableData *sourceData = [NSMutableData dataWithData:data2];
+        [sourceData appendBytes:byteArr2 length:4];
+
+        //        NSMutableData *commandData = [[NSMutableData alloc] init];
+//        [commandData appendBytes:cmd length:2];
+//        NSStringEncoding gbk=CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+//        NSData* payload = [text dataUsingEncoding:gbk];
+//        [commandData appendData:payload];
+        NSData *data= [NSData dataWithBytes:byteArr1 length:8];
+        [self controlDevicePrintingData:data];
+        [self controlDevicePrintingData:data2];
+
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);
     }
+
+    @finally{
+        [self.tcpSocketConnect disconnectAfterWriting];
+    }
+
 }
 
 
@@ -63,6 +85,20 @@
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
 
     NSLog(@"TCP connected to host: %@ port: %d", host, port);
+
+}
+
+- (void)socket:(GCDAsyncSocket *)sender didReadData:(NSData *)data withTag:(long)tag{
+#if HK_SOCKET_DEBUG
+    NSLog(@"data for tag %llu didRead",(unsigned long long)tag);
+#endif
+
+}
+
+- (void)socket:(GCDAsyncSocket *)sender didWriteDataWithTag:(long)tag{
+
+    NSLog(@"data for tag %llu didWrite",(unsigned long long)tag);
+    [self.tcpSocketConnect disconnect];
 
 }
 
@@ -80,6 +116,8 @@
     _successCallback = nil;
     _errorCallback = nil;
     [self.tcpSocketConnect setDelegate: nil];
+    self.tcpSocketConnect = nil;
+    NSLog(@"HERE");
 }
 
 // MARK： 写数据
@@ -90,14 +128,6 @@
 // MARK: 读数据
 -(void)readDataFromSocketWithTag: (NSInteger)tag {
     [self.tcpSocketConnect readDataWithTimeout:-1 tag:tag];
-}
-#pragma mark - Getters
-- (GCDAsyncSocket *)tcpSocketConnect {
-    if (!_tcpSocketConnect) {
-        _tcpSocketConnect = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.methodQueue];
-    }
-
-    return _tcpSocketConnect;
 }
 
 @end
