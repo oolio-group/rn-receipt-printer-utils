@@ -1,0 +1,133 @@
+#import "NetPrinterSunmiAdapter.h"
+#import "sys/utsname.h"
+#import "GCDAsyncSocket.h"
+#import <AdSupport/AdSupport.h>
+#import <ifaddrs.h>
+#import <arpa/inet.h>
+#import <sys/sockio.h>
+#import <sys/ioctl.h>
+#include <sys/socket.h>
+#include <sys/sysctl.h>
+#include <net/if.h>
+#include <net/if_dl.h>
+
+#define BROADCAST_IP        @"224.0.0.1"
+
+@interface NetPrinterSunmiAdapter()<GCDAsyncSocketDelegate>
+{
+    NSString *ipString;
+    RCTResponseSenderBlock _successCallback;
+    RCTResponseSenderBlock _errorCallback;
+}
+
+@property (nonatomic, strong) GCDAsyncSocket* tcpSocketConnect;
+
+
+@end
+
+@implementation NetPrinterSunmiAdapter
+
+- (dispatch_queue_t)methodQueue
+{
+    return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+}
+
+
+- (void) connectAndSend:(NSString *)host
+               withPort:(nonnull NSNumber *)port
+           printRawData:(NSString *)text
+                success:(RCTResponseSenderBlock)successCallback
+                   fail:(RCTResponseSenderBlock)errorCallback {
+
+    @try {
+        if (!self.tcpSocketConnect) {
+            self.tcpSocketConnect = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
+        }
+        BOOL isConnectSuccess = [self connectSocketWithIP:host];
+         NSLog(@"TCP connected to host: %d,",isConnectSuccess);
+        !isConnectSuccess ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host] : nil;
+         _successCallback= successCallback;
+         _errorCallback= errorCallback;
+        Byte byteArr1[16] = {0x1D, 0x28 ,0x45, 0x03, 0x00, 0x06, 0x03, 0x01};
+        Byte byteArr2[4] = {0x0a, 0x0a, 0x0a, 0x0a};
+        NSData *data2 = nil;
+        data2 = [text dataUsingEncoding:NSUTF8StringEncoding];
+        NSMutableData *sourceData = [NSMutableData dataWithData:data2];
+        [sourceData appendBytes:byteArr2 length:4];
+
+        //        NSMutableData *commandData = [[NSMutableData alloc] init];
+//        [commandData appendBytes:cmd length:2];
+//        NSStringEncoding gbk=CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+//        NSData* payload = [text dataUsingEncoding:gbk];
+//        [commandData appendData:payload];
+        NSData *data= [NSData dataWithBytes:byteArr1 length:8];
+        [self controlDevicePrintingData:data];
+        [self controlDevicePrintingData:data2];
+
+    } @catch (NSException *exception) {
+        errorCallback(@[exception.reason]);
+    }
+
+    @finally{
+        [self.tcpSocketConnect disconnectAfterWriting];
+    }
+
+}
+
+
+- (BOOL)connectSocketWithIP:(NSString *)ip  {
+
+    return [self.tcpSocketConnect connectToHost:ip onPort:9100 error:nil];
+}
+
+#pragma mark - GCDAsyncSocketDelegate
+
+- (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
+
+    NSLog(@"TCP connected to host: %@ port: %d", host, port);
+
+}
+
+- (void)socket:(GCDAsyncSocket *)sender didReadData:(NSData *)data withTag:(long)tag{
+#if HK_SOCKET_DEBUG
+    NSLog(@"data for tag %llu didRead",(unsigned long long)tag);
+#endif
+
+}
+
+- (void)socket:(GCDAsyncSocket *)sender didWriteDataWithTag:(long)tag{
+
+    NSLog(@"data for tag %llu didWrite",(unsigned long long)tag);
+    [self.tcpSocketConnect disconnect];
+
+}
+
+- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err {
+    NSLog(@"Disconnected from socket with error: %@", err);
+
+      if (err!= nil)
+      {
+        _errorCallback != nil ? _errorCallback(@[[NSString stringWithFormat:@"Delegate with ERROR"]]) : nil;
+
+    } else {
+       _successCallback != nil ? _successCallback(@[[NSString stringWithFormat:@"Successfuly printed"]]) : nil;
+    }
+
+    _successCallback = nil;
+    _errorCallback = nil;
+    [self.tcpSocketConnect setDelegate: nil];
+    self.tcpSocketConnect = nil;
+    NSLog(@"HERE");
+}
+
+// MARK： 写数据
+- (void)controlDevicePrintingData:(NSData *)ipData {
+    [self.tcpSocketConnect writeData:ipData withTimeout:10 tag:100];
+}
+
+// MARK: 读数据
+-(void)readDataFromSocketWithTag: (NSInteger)tag {
+    [self.tcpSocketConnect readDataWithTimeout:-1 tag:tag];
+}
+
+@end

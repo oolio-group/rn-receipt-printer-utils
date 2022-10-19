@@ -8,6 +8,7 @@ export enum PrinterBrand {
   EPSON = 'EPSON',
   STAR = 'STAR',
   OTHER = 'OTHER',
+  SUNMI = 'SUNMI',
 }
 
 export enum PrinterSeries {

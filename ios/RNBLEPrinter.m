@@ -9,7 +9,6 @@
 
 #import "RNBLEPrinter.h"
 #import "adapters/epson/BLEPrinterEpsonAdapter.h"
-#import "adapters/generic/BLEPrinterGenericAdapter.h"
 #import "utils/NSDataAdditions.h"
 #import "utils/EpsonUtils.h"
 
@@ -51,10 +50,6 @@ RCT_EXPORT_METHOD(connectAndSend:(NSString *)bdAddress
         if ([brand  isEqual: @"EPSON"]) {
             BLEPrinterEpsonAdapter *adapter = [BLEPrinterEpsonAdapter alloc];
             [adapter connectAndSend:bdAddress printRawData:text epsonModel:number success:successCallback fail:errorCallback];
-        }
-        else {
-            BLEPrinterGenericAdapter *adapter = [BLEPrinterGenericAdapter alloc];
-            [adapter connectAndSend:bdAddress printRawData:text success:successCallback fail:errorCallback];
         }
     } @catch (NSException *exception) {
         errorCallback(@[exception.reason]);

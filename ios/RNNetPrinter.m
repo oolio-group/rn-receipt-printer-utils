@@ -7,7 +7,7 @@
 
 #import "RNNetPrinter.h"
 #import "adapters/epson/NetPrinterEpsonAdapter.h"
-#import "adapters/generic/NetPrinterGenericAdapter.h"
+#import "adapters/sunmi/NetPrinterSunmiAdapter.h"
 #import "utils/NSDataAdditions.h"
 #import "utils/EpsonUtils.h"
 
@@ -52,7 +52,7 @@ RCT_EXPORT_METHOD(connectAndSend:(NSString *)host
             [adapter connectAndSend:host withPort:port printRawData:text epsonModel:number success:successCallback fail:errorCallback];
         }
         else {
-            NetPrinterGenericAdapter *adapter = [NetPrinterGenericAdapter alloc];
+            NetPrinterSunmiAdapter *adapter = [NetPrinterSunmiAdapter alloc];
             [adapter connectAndSend:host withPort:port printRawData:text success:successCallback fail:errorCallback];
         }
     } @catch (NSException *exception) {
