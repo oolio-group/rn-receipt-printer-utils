@@ -13,8 +13,7 @@ interface Printer {
   port: number;
 }
 const PRINTERS: Array<Printer> = [
-  { device_name: 'P1', host: '10.15.0.78', port: 9100 },
-  { device_name: 'P2', host: '10.15.0.174', port: 9100 },
+  { device_name: 'P1', host: '10.15.0.86', port: 9100 },
 ];
 
 let globalCount = 0;
@@ -25,7 +24,7 @@ export default function App() {
     const buffer = Buffer.from(
       globalCount + ' ::: minions minions minions \n \n '
     );
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1; i++) {
       let spont: number = Math.floor(Math.random() * PRINTERS.length);
       const printer = PRINTERS[spont];
       try {
