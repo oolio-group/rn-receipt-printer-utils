@@ -12,7 +12,7 @@
 #import <stdlib.h>
 
 @interface NetPrinterEpsonAdapter() <Epos2PtrReceiveDelegate>
-- (void) connectAndSendAux:(NSString *_Nullable)host printRawData: (NSString *_Nullable)text success:(RCTResponseSenderBlock _Nullable )successCallback fail:(RCTResponseSenderBlock _Nullable )errorCallback printerObj:(Epos2Printer *)printerObj;
+- (void) connectAndSendAux:(NSString *_Nullable)host printRawData: (NSString *_Nullable)text success:(RCTResponseSenderBlock _Nullable )successCallback fail:(RCTResponseSenderBlock _Nullable )errorCallback printerObj:(Epos2Printer *)printer;
 @end
 
   NSMutableDictionary *printerDictionary;
@@ -67,7 +67,8 @@
     }
     @synchronized (printerLock) {
             @try{
-            [printer setReceiveEventDelegate:self];
+                __weak NetPrinterEpsonAdapter *weakSelf = self;
+            [printer setReceiveEventDelegate:weakSelf];
             do{
               @try{
                 _retryAttempts++;
@@ -81,7 +82,7 @@
                    @throw exception;
                  }
                  [printer endTransaction];
-                 int retryFailResult =[printer disconnect];
+                 [printer disconnect];
                  [printer clearCommandBuffer];
                  [NSThread sleepForTimeInterval:(3.0f * _retryAttempts)];
               }
