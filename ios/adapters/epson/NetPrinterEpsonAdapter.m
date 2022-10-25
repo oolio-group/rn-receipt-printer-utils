@@ -35,28 +35,31 @@
               epsonModel:(int)modelNumber
                 success:(RCTResponseSenderBlock)successCallback
                    fail:(RCTResponseSenderBlock)errorCallback {
+
     _retryAttempts=0;
     _finishedAsyncCall=NO;
+
+   Epos2Printer *printer = [[Epos2Printer alloc] initWithPrinterSeries:modelNumber lang:EPOS2_MODEL_ANK];
+   NSString *printerLock;
+
     @synchronized (printerDictionary) {
         if(printerDictionary == nil)
         {
             printerDictionary = [[NSMutableDictionary alloc] init];
         }
     }
-    Epos2Printer *printer = [[Epos2Printer alloc] initWithPrinterSeries:modelNumber lang:EPOS2_MODEL_ANK];
-    NSString *printerLock;
+ 
 
     @synchronized (printerDictionary) {
         printerLock = [printerDictionary objectForKey:host];
-
-
         if (printerLock == nil)
         {
-                printerLock= [NSString stringWithFormat:@"%@", host];
-                [printerDictionary setObject:printerLock forKey:host];
+            printerLock= [NSString stringWithFormat:@"%@", host];
+            [printerDictionary setObject:printerLock forKey:host];
         }
 
     }
+
     @synchronized (printerLock) {
             @try{
                 __weak NetPrinterEpsonAdapter *weakSelf = self;
@@ -103,7 +106,7 @@
               [printer setReceiveEventDelegate:nil];
               errorCallback(@[[NSString stringWithFormat:@"%@ and disconnect code %i",exception.reason,failResult]]);
         }
-            @finally
+          @finally
             {
                 _successCallback=nil;
                 _errorCallback=nil;
