@@ -1,3 +1,4 @@
+
 //
 //  NetPrinterEpsonAdapter.m
 //
@@ -21,8 +22,6 @@
     RCTResponseSenderBlock _errorCallback;
     int _retryAttempts;
     BOOL _finishedAsyncCall;
-
-
 }
 
 - (dispatch_queue_t)methodQueue
@@ -36,19 +35,12 @@
               epsonModel:(int)modelNumber
                 success:(RCTResponseSenderBlock)successCallback
                    fail:(RCTResponseSenderBlock)errorCallback {
-        _retryAttempts=0;
+    _retryAttempts=0;
     _finishedAsyncCall=NO;
     @synchronized (printerDictionary) {
         if(printerDictionary == nil)
         {
-
-
-
             printerDictionary = [[NSMutableDictionary alloc] init];
-
-
-
-
         }
     }
     Epos2Printer *printer = [[Epos2Printer alloc] initWithPrinterSeries:modelNumber lang:EPOS2_MODEL_ANK];
@@ -95,7 +87,6 @@
            while (!_finishedAsyncCall && startTime + delayInSeconds > currTime) {
                         [NSThread sleepForTimeInterval:0.5];
                         currTime =  [[NSDate date] timeIntervalSince1970];
-
             }
             if (!_finishedAsyncCall) {
                 [NSException raise:@"Print failed" format:@"Delegate Function not called"];
@@ -104,9 +95,6 @@
             [printer disconnect];
             [printer clearCommandBuffer];
             [printer setReceiveEventDelegate:nil];
-
-
-
         } @catch (NSException *exception) {
 
               [printer endTransaction];
@@ -122,11 +110,6 @@
             }
         }
 
-
-
-
-
-
 }
 
 - (void) connectAndSendAux:(NSString *)host printRawData:(NSString *)text success:(RCTResponseSenderBlock)successCallback fail:(RCTResponseSenderBlock)errorCallback printerObj:(Epos2Printer *)printer {
@@ -137,17 +120,12 @@
 
             [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@, ERROR code: %i", host,result];
         }
-
-
         NSData* payload = [NSData dataWithBase64EncodedString:text];
-
         [printer addCommand:payload];
         result = [printer sendData:5000];
-
         if (result != EPOS2_SUCCESS) {
             [NSException raise:@"Print failed" format:@"Error occurred while printing"];
         }
-
         _successCallback = successCallback;
         _errorCallback = errorCallback;
 
@@ -155,16 +133,12 @@
 - (void) onPtrReceive:(Epos2Printer *)printerObj code:(int)code status:(Epos2PrinterStatusInfo *)status printJobId:(NSString *)printJobId
 {
     NSString *errMsg = [EpsonUtils makeErrorMessage:status];
-
     _finishedAsyncCall=YES;
-
     if ([errMsg  isEqual: @""]) {
         _successCallback != nil ? _successCallback(@[[NSString stringWithFormat:@"Successfuly printed"]]) : nil;
     } else {
         _errorCallback != nil ? _errorCallback(@[[NSString stringWithFormat:@"Delegate with ERROR and message %@",errMsg]]) : nil;
     }
-
-
     return;
 }
 
