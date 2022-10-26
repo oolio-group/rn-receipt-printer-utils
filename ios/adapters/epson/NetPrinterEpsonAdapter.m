@@ -17,9 +17,10 @@
                   success:(RCTResponseSenderBlock _Nullable)successCallback
                      fail:(RCTResponseSenderBlock _Nullable)errorCallback
                printerObj:(Epos2Printer *)printer;
+              //  Assuming here printer object will be cleaned up after the function connectAndSendAux is finished
 @end
 
-NSMutableDictionary *printerDictionary;
+NSMutableDictionary *printerLocksByIp;
 @implementation NetPrinterEpsonAdapter {
   RCTResponseSenderBlock _successCallback;
   RCTResponseSenderBlock _errorCallback;
@@ -45,18 +46,20 @@ NSMutableDictionary *printerDictionary;
       [[Epos2Printer alloc] initWithPrinterSeries:modelNumber
                                              lang:EPOS2_MODEL_ANK];
   NSString *printerLock;
-
-  @synchronized(printerDictionary) {
-    if (printerDictionary == nil) {
-      printerDictionary = [[NSMutableDictionary alloc] init];
+// printerLocksByIp object is a global variable, hence its ref address is being used here as the ID
+// for this code block. Any thread calling this code block of this ID, will lock, or wait until other
+// the lock of printerLocksByIp is released.
+  @synchronized(printerLocksByIp) {
+    if (printerLocksByIp == nil) {
+      printerLocksByIp = [[NSMutableDictionary alloc] init];
     }
   }
 
-  @synchronized(printerDictionary) {
-    printerLock = [printerDictionary objectForKey:host];
+  @synchronized(printerLocksByIp) {
+    printerLock = [printerLocksByIp objectForKey:host];
     if (printerLock == nil) {
       printerLock = [NSString stringWithFormat:@"%@", host];
-      [printerDictionary setObject:printerLock forKey:host];
+      [printerLocksByIp setObject:printerLock forKey:host];
     }
   }
 
@@ -95,6 +98,9 @@ NSMutableDictionary *printerDictionary;
         [NSException raise:@"Print failed"
                     format:@"Delegate Function not called"];
       }
+      // Delegate function onPtrReceive doesn't do the disconnecting anymore,
+      // do the disconnect here if the delegate function executes successfully.
+      // Do the disconnect in the catch if delegate function is not called
       [printer endTransaction];
       [printer disconnect];
       [printer clearCommandBuffer];
