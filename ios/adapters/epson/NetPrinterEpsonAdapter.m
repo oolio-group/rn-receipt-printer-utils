@@ -87,7 +87,7 @@ NSMutableDictionary *printerLocksByIp;
         }
       } while (_retryAttempts < 3);
 
-      long delayInSeconds = 3;
+      long delayInSeconds = 60;
       long startTime = [[NSDate date] timeIntervalSince1970];
       long currTime = [[NSDate date] timeIntervalSince1970];
       while (!_finishedAsyncCall && startTime + delayInSeconds > currTime) {
