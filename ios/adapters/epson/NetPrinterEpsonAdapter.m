@@ -132,6 +132,7 @@ static NSLock *connectionAPIsema;
         }
         [printer clearCommandBuffer];
         [printer setReceiveEventDelegate:nil];
+        [printer setConnectionEventDelegate:nil];
       } @catch (NSException *exception) {
 
         [printer endTransaction];
@@ -142,6 +143,7 @@ static NSLock *connectionAPIsema;
         }
         [printer clearCommandBuffer];
         [printer setReceiveEventDelegate:nil];
+        [printer setConnectionEventDelegate:nil];
         errorCallback(
             @[ [NSString stringWithFormat:@"%@ and disconnect code %i",
                                           exception.reason, failResult] ]);
