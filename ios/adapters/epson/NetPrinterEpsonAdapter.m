@@ -13,22 +13,15 @@
 
 @interface NetPrinterEpsonAdapter () <Epos2PtrReceiveDelegate,
                                       Epos2ConnectionDelegate>
-- (void)connectAndSendAux:(NSString *_Nullable)host
-             printRawData:(NSString *_Nullable)text
-                  success:(RCTResponseSenderBlock _Nullable)successCallback
-                     fail:(RCTResponseSenderBlock _Nullable)errorCallback
-               printerObj:(Epos2Printer *)printer;
-//  Assuming here printer object will be cleaned up after the function
-//  connectAndSendAux is finished
+
 @end
 
-static NSMutableDictionary *printerLocksByIp;
-static NSLock *connectionAPIsema;
+static NSMutableDictionary *printersByIP;
+static NSLock *connectionAPIlock;
 
 @implementation NetPrinterEpsonAdapter {
   RCTResponseSenderBlock _successCallback;
   RCTResponseSenderBlock _errorCallback;
-  int _retryAttempts;
   int _finishedAsyncCall;
 }
 
@@ -43,58 +36,56 @@ static NSLock *connectionAPIsema;
                success:(RCTResponseSenderBlock)successCallback
                   fail:(RCTResponseSenderBlock)errorCallback {
 
-  _retryAttempts = 3; // TEMP CHANGE NO RETRIES
   _finishedAsyncCall = 0;
   @autoreleasepool {
-    Epos2Printer *printer =
-        [[Epos2Printer alloc] initWithPrinterSeries:modelNumber
-                                               lang:EPOS2_MODEL_ANK];
-    NSString *printerLock;
-    // printerLocksByIp object is a global variable, hence its ref address is
+    Epos2Printer *printer;
+
+    // printersByIP object is a global variable, hence its ref address is
     // being used here as the ID for this code block. Any thread calling this
     // code block of this ID, will lock, or wait until other the lock of
-    // printerLocksByIp is released.
-    if (printerLocksByIp == nil) {
-      @synchronized(printerLocksByIp) {
-        if (printerLocksByIp == nil) {
-          printerLocksByIp = [[NSMutableDictionary alloc] init];
+    // printersByIP is released.
+    if (printersByIP == nil) {
+      @synchronized(printersByIP) {
+        if (printersByIP == nil) {
+          printersByIP = [[NSMutableDictionary alloc] init];
         }
       }
     }
 
-    @synchronized(printerLocksByIp) {
-      printerLock = [printerLocksByIp objectForKey:host];
-      if (printerLock == nil) {
-        printerLock = [NSString stringWithFormat:@"%@", host];
-        [printerLocksByIp setObject:printerLock forKey:host];
+    @synchronized(printersByIP) {
+      printer = [printersByIP objectForKey:host];
+      if (printer == nil) {
+        printer = [[Epos2Printer alloc] initWithPrinterSeries:modelNumber
+                                                         lang:EPOS2_MODEL_ANK];
+
+        [printersByIP setObject:printer forKey:host];
       }
     }
 
-    @synchronized(printerLock) {
+    @synchronized(printer) {
       @try {
         __weak NetPrinterEpsonAdapter *weakSelf = self;
         [printer setReceiveEventDelegate:weakSelf];
         [printer setConnectionEventDelegate:weakSelf];
-        do {
-          @try {
 
-            _retryAttempts++;
-            [self connectAndSendAux:host
-                       printRawData:text
-                            success:successCallback
-                               fail:errorCallback
-                         printerObj:printer];
-            _retryAttempts = 3;
-          } @catch (NSException *exception) {
-            if (_retryAttempts >= 3) {
-              @throw exception;
-            }
-            [printer endTransaction];
-            [self netAdapterDisconnect:printer];
-            [printer clearCommandBuffer];
-            [NSThread sleepForTimeInterval:(3.0f * _retryAttempts)];
+          NSString *target = [NSString stringWithFormat:@"TCP:%@", host];
+          int result = EPOS2_SUCCESS;
+          result = [self netAdapterConnect:printer target:target];
+          if ((result != EPOS2_SUCCESS) && (result != EPOS2_ERR_ILLEGAL) ) {
+
+            [NSException
+                 raise:@"Invalid connection"
+                format:@"Can't connect to printer %@, ERROR code: %i", host, result];
           }
-        } while (_retryAttempts < 3);
+          NSData *payload = [NSData dataWithBase64EncodedString:text];
+          [printer beginTransaction];
+          [printer addCommand:payload];
+          result = [printer sendData:5000];
+          if (result != EPOS2_SUCCESS) {
+            [NSException raise:@"Print failed" format:@"Error occurred while printing"];
+          }
+          _successCallback = successCallback;
+          _errorCallback = errorCallback;
 
         long delayInSeconds = 20;
         long startTime = [[NSDate date] timeIntervalSince1970];
@@ -155,29 +146,6 @@ static NSLock *connectionAPIsema;
   }
 }
 
-- (void)connectAndSendAux:(NSString *)host
-             printRawData:(NSString *)text
-                  success:(RCTResponseSenderBlock)successCallback
-                     fail:(RCTResponseSenderBlock)errorCallback
-               printerObj:(Epos2Printer *)printer {
-  NSString *target = [NSString stringWithFormat:@"TCP:%@", host];
-  int result = EPOS2_SUCCESS;
-  result = [self netAdapterConnect:printer target:target];
-  if (result != EPOS2_SUCCESS) {
-
-    [NSException
-         raise:@"Invalid connection"
-        format:@"Can't connect to printer %@, ERROR code: %i", host, result];
-  }
-  NSData *payload = [NSData dataWithBase64EncodedString:text];
-  [printer addCommand:payload];
-  result = [printer sendData:5000];
-  if (result != EPOS2_SUCCESS) {
-    [NSException raise:@"Print failed" format:@"Error occurred while printing"];
-  }
-  _successCallback = successCallback;
-  _errorCallback = errorCallback;
-}
 - (void)onPtrReceive:(Epos2Printer *)printerObj
                 code:(int)code
               status:(Epos2PrinterStatusInfo *)status
@@ -209,35 +177,35 @@ static NSLock *connectionAPIsema;
 }
 
 - (int)netAdapterConnect:(Epos2Printer *)printerObj target:(NSString *)target {
-  if (connectionAPIsema == nil) {
-    @synchronized(connectionAPIsema) {
-      if (connectionAPIsema == nil) {
-        connectionAPIsema = [[NSLock alloc] init];
+  if (connectionAPIlock == nil) {
+    @synchronized(connectionAPIlock) {
+      if (connectionAPIlock == nil) {
+        connectionAPIlock = [[NSLock alloc] init];
       }
     }
   }
-  [connectionAPIsema lock];
+  [connectionAPIlock lock];
 
   int result = [printerObj connect:target timeout:5000];
 
-  [connectionAPIsema unlock];
+  [connectionAPIlock unlock];
 
   return result;
 }
 
 - (int)netAdapterDisconnect:(Epos2Printer *)printerObj {
-  if (connectionAPIsema == nil) {
-    @synchronized(connectionAPIsema) {
-      if (connectionAPIsema == nil) {
-        connectionAPIsema = [[NSLock alloc] init];
+  if (connectionAPIlock == nil) {
+    @synchronized(connectionAPIlock) {
+      if (connectionAPIlock == nil) {
+        connectionAPIlock = [[NSLock alloc] init];
       }
     }
   }
-  [connectionAPIsema lock];
+  [connectionAPIlock lock];
 
   int result = [printerObj disconnect];
 
-  [connectionAPIsema unlock];
+  [connectionAPIlock unlock];
 
   return result;
 }
