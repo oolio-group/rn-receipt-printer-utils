@@ -71,7 +71,7 @@ static NSLock *connectionAPIlock;
           NSString *target = [NSString stringWithFormat:@"TCP:%@", host];
           int result = EPOS2_SUCCESS;
           result = [self netAdapterConnect:printer target:target];
-          if (result != EPOS2_SUCCESS) {
+          if ((result != EPOS2_SUCCESS) && (result != EPOS2_ERR_ILLEGAL) ) {
 
             [NSException
                  raise:@"Invalid connection"
