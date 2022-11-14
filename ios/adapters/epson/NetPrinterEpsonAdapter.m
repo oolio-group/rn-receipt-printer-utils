@@ -36,7 +36,7 @@ static NSMutableDictionary *printersByIP;
       {
          printersByIP=[[NSMutableDictionary alloc]init];
       }
-    
+
      Epos2Printer *printer = [printersByIP objectForKey:host];
 
       if (printer == nil) {
@@ -46,21 +46,26 @@ static NSMutableDictionary *printersByIP;
       }
 
        Epos2PrinterStatusInfo* status = [printer getStatus];
-    [printer setReceiveEventDelegate:self];
+
+       if([status getConnection] != EPOS2_TRUE)
+       {
         int result = EPOS2_SUCCESS;
-        
+
         NSString* target = [NSString stringWithFormat:@"TCP:%@", host];
         result = [printer connect:target timeout:5000];
 
-        if (result != EPOS2_SUCCESS && result != EPOS2_ERR_ILLEGAL) {
+        if (result != EPOS2_SUCCESS ) {
             [NSException raise:@"Invalid connection" format:@"Can't connect to printer %@", host];
         }
+       }
+
+      [printer setReceiveEventDelegate:self];
 
         NSData* payload = [NSData dataWithBase64EncodedString:text];
         [printer addCommand:payload];
-        result = [printer sendData:5000];
+        int sendResult = [printer sendData:5000];
 
-        if (result != EPOS2_SUCCESS) {
+        if (sendResult != EPOS2_SUCCESS) {
             [NSException raise:@"Print failed" format:@"Error occurred while printing"];
         }
 
@@ -87,7 +92,7 @@ static NSMutableDictionary *printersByIP;
     int failResult = [printerObj disconnect];
     while (failResult == EPOS2_ERR_PROCESSING) {
         [NSThread sleepForTimeInterval:0.5];
-        failResult = [self netAdapterDisconnect:printer];
+        failResult = [printerObj disconnect];
     }
     [printerObj clearCommandBuffer];
     [printerObj setReceiveEventDelegate:nil];
