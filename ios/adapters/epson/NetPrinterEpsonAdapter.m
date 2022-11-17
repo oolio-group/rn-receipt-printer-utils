@@ -23,6 +23,8 @@ static NSLock *connectionAPIlock;
   RCTResponseSenderBlock _successCallback;
   RCTResponseSenderBlock _errorCallback;
   int _finishedAsyncCall;
+  int _failedConnect;
+  Epos2Printer *printer;
 }
 
 - (dispatch_queue_t)methodQueue {
@@ -38,12 +40,7 @@ static NSLock *connectionAPIlock;
 
   _finishedAsyncCall = 0;
   @autoreleasepool {
-    Epos2Printer *printer;
 
-    // printersByIP object is a global variable, hence its ref address is
-    // being used here as the ID for this code block. Any thread calling this
-    // code block of this ID, will lock, or wait until other the lock of
-    // printersByIP is released.
     if (printersByIP == nil) {
       @synchronized(printersByIP) {
         if (printersByIP == nil) {
@@ -64,28 +61,46 @@ static NSLock *connectionAPIlock;
 
     @synchronized(printer) {
       @try {
-        __weak NetPrinterEpsonAdapter *weakSelf = self;
-        [printer setReceiveEventDelegate:weakSelf];
-        [printer setConnectionEventDelegate:weakSelf];
 
-          NSString *target = [NSString stringWithFormat:@"TCP:%@", host];
-          int result = EPOS2_SUCCESS;
+        NSString *target = [NSString stringWithFormat:@"TCP:%@", host];
+        int result = EPOS2_SUCCESS;
+
+        Epos2PrinterStatusInfo *status = [printer getStatus];
+
+        if ([status getConnection] != EPOS2_TRUE) {
+
           result = [self netAdapterConnect:printer target:target];
-          if (result != EPOS2_SUCCESS) {
+          if ((result != EPOS2_SUCCESS)) {
 
+            @synchronized(printersByIP) {
+              if (printer == [printersByIP objectForKey:host]) {
+
+                [printersByIP
+                    setObject:[[Epos2Printer alloc]
+                                  initWithPrinterSeries:modelNumber
+                                                   lang:EPOS2_MODEL_ANK]
+                       forKey:host];
+              }
+            }
             [NSException
                  raise:@"Invalid connection"
                 format:@"Can't connect to printer %@, ERROR code: %i", host, result];
           }
-          NSData *payload = [NSData dataWithBase64EncodedString:text];
-          [printer beginTransaction];
-          [printer addCommand:payload];
-          result = [printer sendData:5000];
-          if (result != EPOS2_SUCCESS) {
-            [NSException raise:@"Print failed" format:@"Error occurred while printing"];
-          }
-          _successCallback = successCallback;
-          _errorCallback = errorCallback;
+        }
+        __weak NetPrinterEpsonAdapter *weakSelf = self;
+        [printer setReceiveEventDelegate:weakSelf];
+        [printer setConnectionEventDelegate:weakSelf];
+
+        NSData *payload = [NSData dataWithBase64EncodedString:text];
+        [printer beginTransaction];
+        [printer addCommand:payload];
+        result = [printer sendData:5000];
+        if (result != EPOS2_SUCCESS) {
+          [NSException raise:@"Print failed"
+                      format:@"Error occurred while printing"];
+        }
+        _successCallback = successCallback;
+        _errorCallback = errorCallback;
 
         long delayInSeconds = 20;
         long startTime = [[NSDate date] timeIntervalSince1970];
@@ -121,9 +136,7 @@ static NSLock *connectionAPIlock;
           [NSThread sleepForTimeInterval:0.5];
           successDisconnectResult = [self netAdapterDisconnect:printer];
         }
-        [printer clearCommandBuffer];
-        [printer setReceiveEventDelegate:nil];
-        [printer setConnectionEventDelegate:nil];
+
       } @catch (NSException *exception) {
 
         [printer endTransaction];
@@ -132,15 +145,16 @@ static NSLock *connectionAPIlock;
           [NSThread sleepForTimeInterval:0.5];
           failResult = [self netAdapterDisconnect:printer];
         }
-        [printer clearCommandBuffer];
-        [printer setReceiveEventDelegate:nil];
-        [printer setConnectionEventDelegate:nil];
         errorCallback(
             @[ [NSString stringWithFormat:@"%@ and disconnect code %i",
                                           exception.reason, failResult] ]);
       } @finally {
         _successCallback = nil;
         _errorCallback = nil;
+        [printer clearCommandBuffer];
+        [printer setReceiveEventDelegate:nil];
+        [printer setConnectionEventDelegate:nil];
+        printer = nil;
       }
     }
   }
