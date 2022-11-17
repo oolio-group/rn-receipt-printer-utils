@@ -1,19 +1,16 @@
-
 //
 //  NetPrinterEpsonAdapter.m
 //
 //  Created by Till POS on 14/09/21.
 //
 
+
 #import "NetPrinterEpsonAdapter.h"
-#import "../../utils/EpsonUtils.h"
-#import "../../utils/NSDataAdditions.h"
 #import "EpsonPrinterSDK.h"
-#import <stdlib.h>
+#import "../../utils/NSDataAdditions.h"
+#import "../../utils/EpsonUtils.h"
 
-@interface NetPrinterEpsonAdapter () <Epos2PtrReceiveDelegate,
-                                      Epos2ConnectionDelegate>
-
+@interface NetPrinterEpsonAdapter() <Epos2PtrReceiveDelegate>
 @end
 
 static NSMutableDictionary *printersByIP;
@@ -28,8 +25,9 @@ static NSObject *isLogging;
   Epos2Printer *printer;
 }
 
-- (dispatch_queue_t)methodQueue {
-  return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+- (dispatch_queue_t)methodQueue
+{
+    return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
 }
 
 - (void)connectAndSend:(NSString *)host
@@ -38,15 +36,15 @@ static NSObject *isLogging;
             epsonModel:(int)modelNumber
                success:(RCTResponseSenderBlock)successCallback
                   fail:(RCTResponseSenderBlock)errorCallback {
-    
-    
+
+
   _finishedAsyncCall = 0;
   @autoreleasepool {
       @synchronized (isLogging) {
           if(isLogging == nil)
           {
               int logResult=EPOS2_SUCCESS;
-              
+
               logResult = [Epos2Log setLogSettings:EPOS2_PERIOD_PERMANENT output:EPOS2_OUTPUT_STORAGE ipAddress:nil port:0 logSize:10 logLevel:EPOS2_LOGLEVEL_LOW];
               if(logResult == EPOS2_SUCCESS)
               {
@@ -55,24 +53,21 @@ static NSObject *isLogging;
               }
                       }
       }
-      
+
     if (printersByIP == nil) {
       @synchronized(printersByIP) {
         if (printersByIP == nil) {
           printersByIP = [[NSMutableDictionary alloc] init];
         }
       }
-    }
 
-    @synchronized(printersByIP) {
-      printer = [printersByIP objectForKey:host];
+     Epos2Printer *printer = [printersByIP objectForKey:host];
+
       if (printer == nil) {
         printer = [[Epos2Printer alloc] initWithPrinterSeries:modelNumber
                                                          lang:EPOS2_MODEL_ANK];
-
         [printersByIP setObject:printer forKey:host];
       }
-    }
 
     @synchronized(printer) {
       @try {
@@ -209,38 +204,42 @@ static NSObject *isLogging;
   }
 }
 
-- (int)netAdapterConnect:(Epos2Printer *)printerObj target:(NSString *)target {
-  if (connectionAPIlock == nil) {
-    @synchronized(connectionAPIlock) {
-      if (connectionAPIlock == nil) {
-        connectionAPIlock = [[NSLock alloc] init];
-      }
+        NSData* payload = [NSData dataWithBase64EncodedString:text];
+        [printer addCommand:payload];
+        int sendResult = [printer sendData:5000];
+
+        if (sendResult != EPOS2_SUCCESS) {
+            [NSException raise:@"Print failed" format:@"Error occurred while printing"];
+        }
+
+        _successCallback = successCallback;
+        _errorCallback = errorCallback;
+
+    } @catch (NSException *exception) {
+        errorCallback(@[exception.reason]);
     }
-  }
-  [connectionAPIlock lock];
-
-  int result = [printerObj connect:target timeout:5000];
-
-  [connectionAPIlock unlock];
-
-  return result;
 }
 
-- (int)netAdapterDisconnect:(Epos2Printer *)printerObj {
-  if (connectionAPIlock == nil) {
-    @synchronized(connectionAPIlock) {
-      if (connectionAPIlock == nil) {
-        connectionAPIlock = [[NSLock alloc] init];
-      }
+- (void) onPtrReceive:(Epos2Printer *)printerObj code:(int)code status:(Epos2PrinterStatusInfo *)status printJobId:(NSString *)printJobId
+{
+    NSString *errMsg = [EpsonUtils makeErrorMessage:status];
+    if ([errMsg  isEqual: @""]) {
+        _successCallback != nil ? _successCallback(@[[NSString stringWithFormat:@"Successfuly printed"]]) : nil;
+    } else {
+        _errorCallback != nil ? _errorCallback(@[[NSString stringWithString:errMsg]]) : nil;
     }
-  }
-  [connectionAPIlock lock];
+    _successCallback = nil;
+    _errorCallback = nil;
 
-  int result = [printerObj disconnect];
-
-  [connectionAPIlock unlock];
-
-  return result;
+    [printerObj endTransaction];
+    int failResult = [printerObj disconnect];
+    while (failResult == EPOS2_ERR_PROCESSING) {
+        [NSThread sleepForTimeInterval:0.5];
+        failResult = [printerObj disconnect];
+    }
+    [printerObj clearCommandBuffer];
+    [printerObj setReceiveEventDelegate:nil];
+    return;
 }
 
 @end
