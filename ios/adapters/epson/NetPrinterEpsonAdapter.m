@@ -18,6 +18,7 @@
 
 static NSMutableDictionary *printersByIP;
 static NSLock *connectionAPIlock;
+static NSObject *isLogging;
 
 @implementation NetPrinterEpsonAdapter {
   RCTResponseSenderBlock _successCallback;
@@ -37,10 +38,24 @@ static NSLock *connectionAPIlock;
             epsonModel:(int)modelNumber
                success:(RCTResponseSenderBlock)successCallback
                   fail:(RCTResponseSenderBlock)errorCallback {
-
+    
+    
   _finishedAsyncCall = 0;
   @autoreleasepool {
-
+      @synchronized (isLogging) {
+          if(isLogging == nil)
+          {
+              int logResult=EPOS2_SUCCESS;
+              
+              logResult = [Epos2Log setLogSettings:EPOS2_PERIOD_PERMANENT output:EPOS2_OUTPUT_STORAGE ipAddress:nil port:0 logSize:10 logLevel:EPOS2_LOGLEVEL_LOW];
+              if(logResult == EPOS2_SUCCESS)
+              {
+                  isLogging = [[NSObject alloc] init];
+                  NSLog(@"STARTED LOGGING");
+              }
+                      }
+      }
+      
     if (printersByIP == nil) {
       @synchronized(printersByIP) {
         if (printersByIP == nil) {
@@ -136,6 +151,7 @@ static NSLock *connectionAPIlock;
           [NSThread sleepForTimeInterval:0.5];
           successDisconnectResult = [self netAdapterDisconnect:printer];
         }
+          NSLog(@"SUCCESS PRINT");
 
       } @catch (NSException *exception) {
 
@@ -148,6 +164,7 @@ static NSLock *connectionAPIlock;
         errorCallback(
             @[ [NSString stringWithFormat:@"%@ and disconnect code %i",
                                           exception.reason, failResult] ]);
+          NSLog(@"Fail PRINT");
       } @finally {
         _successCallback = nil;
         _errorCallback = nil;
@@ -165,17 +182,19 @@ static NSLock *connectionAPIlock;
               status:(Epos2PrinterStatusInfo *)status
           printJobId:(NSString *)printJobId {
   NSString *errMsg = [EpsonUtils makeErrorMessage:status];
-  if ([errMsg isEqual:@""]) {
+    NSLog(@"code is %i",code);
+  if ([errMsg isEqual:@""] && (code == EPOS2_CODE_SUCCESS)) {
     _successCallback != nil ? _successCallback(@[ [NSString
                                   stringWithFormat:@"Successfuly printed"] ])
                             : nil;
   } else {
     _errorCallback != nil
         ? _errorCallback(@[ [NSString
-              stringWithFormat:@"Delegate with ERROR and message %@", errMsg] ])
+              stringWithFormat:@"Delegate with ERROR and message %@ and code %i", errMsg,code] ])
         : nil;
   }
   _finishedAsyncCall = 1;
+  NSLog(@"In Delegate");
 
   return;
 }
