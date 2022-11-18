@@ -13,7 +13,7 @@ interface Printer {
   port: number;
 }
 const PRINTERS: Array<Printer> = [
-  { device_name: 'P1', host: '10.15.0.86', port: 9100 },
+  { device_name: 'P1', host: '10.15.0.101', port: 9100 },
 ];
 
 let globalCount = 0;
