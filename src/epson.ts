@@ -1,6 +1,7 @@
 import EscPosPrinter, {
   getPrinterSeriesByName,
 } from 'react-native-esc-pos-printer';
+import { PrinterSeries } from '.';
 
 var isExecuting = false;
 export const EpsonUtil = {
@@ -8,6 +9,7 @@ export const EpsonUtil = {
     host: string,
     data: Buffer,
     isLan: boolean,
+    series: PrinterSeries,
     successCallback: (res: any) => void,
     errorCallback: (res: any) => void
   ) => {
@@ -18,26 +20,16 @@ export const EpsonUtil = {
     try {
       isExecuting = true;
       const target = (isLan ? 'TCP:' : 'BT:') + host;
-      const printers = await EscPosPrinter.discover();
-      console.log(printers[0].target);
-      const printer = printers.find(
-        (printerObj) =>
-          printerObj.target === target || (isLan && printerObj.ip === host)
-      );
-      if (printer) {
-        console.log('in here');
-        await EscPosPrinter.init({
-          target: printer.target,
-          seriesName: getPrinterSeriesByName(printer.name),
-        });
 
-        const printing = new EscPosPrinter.printing();
-        const status = await printing.initialize().data(data).send();
-        successCallback('Successfully printed with status:' + status);
-      } else {
-        console.log('in here error');
-        throw new Error('Cannot find printer ' + target);
-      }
+      console.log('in here');
+      await EscPosPrinter.init({
+        target: target,
+        seriesName: getPrinterSeriesByName(series),
+      });
+
+      const printing = new EscPosPrinter.printing();
+      const status = await printing.initialize().data(data).send();
+      successCallback('Successfully printed with status:' + status);
     } catch (e) {
       errorCallback(e);
     } finally {

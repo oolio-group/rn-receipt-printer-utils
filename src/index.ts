@@ -102,6 +102,7 @@ export const BLEPrinter = {
               bdAddress,
               data,
               false,
+              series,
               (printer: IBLEPrinter) => resolve(printer),
               (error: Error) => reject(error)
             )
@@ -139,6 +140,7 @@ export const NetPrinter = {
               host,
               data,
               true,
+              series,
               (printer: INetPrinter) => resolve(printer),
               (error: Error) => reject(error)
             )
