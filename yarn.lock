@@ -8613,6 +8613,11 @@ react-native-builder-bob@^0.17.1:
   optionalDependencies:
     jetifier "^1.6.6"
 
+react-native-star-io10@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-star-io10/-/react-native-star-io10-1.2.0.tgz#c44ada0547abb26f9d9672ff400f5059e9b9a7c2"
+  integrity sha512-SYlKcRtK7j0wcmoaryvuMUJjAslDNFXbwNFqsJhDaOV0HaMLErTAsmDUc/+rlP4vkAWvfdKdFf5cgTmqs+n5Ow==
+
 react-native@^0.63.2:
   version "0.63.4"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.63.4.tgz#2210fdd404c94a5fa6b423c6de86f8e48810ec36"
