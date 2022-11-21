@@ -11,10 +11,11 @@ export const EpsonUtil = {
     successCallback: (res: any) => void,
     errorCallback: (res: any) => void
   ) => {
+    if (isExecuting) {
+      errorCallback('last function is still executing');
+      return;
+    }
     try {
-      if (isExecuting) {
-        throw new Error('last job still executing');
-      }
       isExecuting = true;
       const target = (isLan ? 'TCP:' : 'BT:') + host;
       const printers = await EscPosPrinter.discover();
