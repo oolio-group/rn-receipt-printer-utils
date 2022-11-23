@@ -1,4 +1,5 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
+import { EpsonUtil } from './epson';
 
 const RNUSBPrinter = NativeModules.RNUSBPrinter;
 const RNBLEPrinter = NativeModules.RNBLEPrinter;
@@ -92,18 +93,27 @@ export const BLEPrinter = {
     bdAddress: string,
     data: Buffer,
     brand: PrinterBrand,
-    series: PrinterSeries
+    series = PrinterSeries.TM_M30
   ): Promise<IBLEPrinter> => {
     const { promiseOrTimeout, timeoutId } = promiseWithTimeout<IBLEPrinter>(
       new Promise((resolve, reject) =>
-        RNBLEPrinter.connectAndSend(
-          bdAddress,
-          data.toString('base64'),
-          brand,
-          series,
-          (printer: IBLEPrinter) => resolve(printer),
-          (error: Error) => reject(error)
-        )
+        brand === PrinterBrand.EPSON
+          ? EpsonUtil.connectAndSend(
+              bdAddress,
+              data,
+              false,
+              series,
+              (printer: IBLEPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
+          : RNBLEPrinter.connectAndSend(
+              bdAddress,
+              data.toString('base64'),
+              brand,
+              series,
+              (printer: IBLEPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
       )
     );
     return new Promise((resolve, reject) =>
@@ -121,19 +131,28 @@ export const NetPrinter = {
     port: number,
     data: Buffer,
     brand: PrinterBrand,
-    series: PrinterSeries
+    series = PrinterSeries.TM_M30
   ): Promise<INetPrinter> => {
     const { promiseOrTimeout, timeoutId } = promiseWithTimeout<INetPrinter>(
       new Promise((resolve, reject) =>
-        RNNetPrinter.connectAndSend(
-          host,
-          port,
-          data.toString('base64'),
-          brand,
-          series,
-          (printer: INetPrinter) => resolve(printer),
-          (error: Error) => reject(error)
-        )
+        brand === PrinterBrand.EPSON
+          ? EpsonUtil.connectAndSend(
+              host,
+              data,
+              true,
+              series,
+              (printer: INetPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
+          : RNNetPrinter.connectAndSend(
+              host,
+              port,
+              data.toString('base64'),
+              brand,
+              series,
+              (printer: INetPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
       )
     );
     return new Promise((resolve, reject) =>
