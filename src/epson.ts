@@ -28,7 +28,10 @@ export const EpsonUtil = {
       });
 
       const printing = new EscPosPrinter.printing();
-      const status = await printing.initialize().data(data).send();
+      const status = await printing
+        .initialize()
+        .data(data)
+        .send({ timeout: 200000 });
       successCallback('Successfully printed with status:' + status);
     } catch (e) {
       errorCallback(e);
