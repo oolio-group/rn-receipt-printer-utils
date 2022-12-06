@@ -1,5 +1,6 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { EpsonUtil } from './epson';
+import { StarUtil } from './star';
 
 const RNUSBPrinter = NativeModules.RNUSBPrinter;
 const RNBLEPrinter = NativeModules.RNBLEPrinter;
@@ -58,6 +59,10 @@ export interface PrintRow {
   width: number;
   text: string;
   feedLine: boolean;
+}
+export interface PrinterUtil {
+  connectAndSend: (...args: any) => void;
+  constructBuffer: (...args: any) => Buffer;
 }
 
 // Timeout for returning response to client
@@ -121,6 +126,14 @@ export const BLEPrinter = {
               (printer: IBLEPrinter) => resolve(printer),
               (error: Error) => reject(error)
             )
+          : brand === PrinterBrand.STAR
+          ? StarUtil.connectAndSend(
+              bdAddress,
+              data,
+              false,
+              (printer: IBLEPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
           : RNBLEPrinter.connectAndSend(
               bdAddress,
               EpsonUtil.constructBuffer(data, PrinterSeries.TM_M30II).toString(
@@ -158,6 +171,14 @@ export const NetPrinter = {
               data,
               true,
               series,
+              (printer: INetPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
+          : brand === PrinterBrand.STAR
+          ? StarUtil.connectAndSend(
+              host,
+              data,
+              true,
               (printer: INetPrinter) => resolve(printer),
               (error: Error) => reject(error)
             )

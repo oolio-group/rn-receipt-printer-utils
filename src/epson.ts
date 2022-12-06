@@ -2,11 +2,11 @@ import EscPosPrinter, {
   getPrinterSeriesByName,
 } from 'react-native-esc-pos-printer';
 import { EscPos } from '@tillpos/xml-escpos-helper';
-import { PrinterSeries, PrintRow } from './index';
+import { PrinterSeries, PrinterUtil, PrintRow } from './index';
 import { template } from './xmlTemplates';
 
 var isExecuting = false;
-export const EpsonUtil = {
+export const EpsonUtil: PrinterUtil = {
   connectAndSend: async (
     host: string,
     data: PrintRow[],
