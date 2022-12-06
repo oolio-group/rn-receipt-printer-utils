@@ -3,8 +3,9 @@ import {
   NetPrinter,
   PrinterBrand,
   PrinterSeries,
+  PrintRow,
+  RowAlignment,
 } from '@tillpos/rn-receipt-printer-utils';
-import { Buffer } from 'buffer';
 import React, { Fragment, useCallback } from 'react';
 
 interface Printer {
@@ -16,14 +17,66 @@ const PRINTERS: Array<Printer> = [
   { device_name: 'P1', host: '10.15.0.101', port: 9100 },
 ];
 
-let globalCount = 0;
-
 export default function App() {
   const testPrint = useCallback(async () => {
-    globalCount++;
-    const buffer = Buffer.from(
-      globalCount + ' ::: minions minions minions \n \n '
-    );
+    const printRows: PrintRow[] = [
+      {
+        isBold: true,
+        alignment: RowAlignment.CENTER,
+        height: 4,
+        width: 1,
+        text: 'New Order \n',
+        feedLine: false,
+      },
+      {
+        isBold: false,
+        alignment: RowAlignment.RIGHT,
+        height: 0,
+        width: 2,
+        text: 'test \n',
+        feedLine: true,
+      },
+      {
+        isBold: false,
+        alignment: RowAlignment.RIGHT,
+        height: 0,
+        width: 2,
+        text: 'test \n',
+        feedLine: false,
+      },
+      {
+        isBold: false,
+        alignment: RowAlignment.RIGHT,
+        height: 0,
+        width: 2,
+        text: 'test \n',
+        feedLine: true,
+      },
+      {
+        isBold: false,
+        alignment: RowAlignment.RIGHT,
+        height: 0,
+        width: 2,
+        text: 'test \n',
+        feedLine: true,
+      },
+      {
+        isBold: false,
+        alignment: RowAlignment.RIGHT,
+        height: 0,
+        width: 2,
+        text: 'Hello World! \n',
+        feedLine: false,
+      },
+      {
+        isBold: false,
+        alignment: RowAlignment.RIGHT,
+        height: 0,
+        width: 2,
+        text: 'test \n',
+        feedLine: true,
+      },
+    ];
     for (let i = 0; i < 1; i++) {
       let spont: number = Math.floor(Math.random() * PRINTERS.length);
       const printer = PRINTERS[spont];
@@ -32,7 +85,7 @@ export default function App() {
         await NetPrinter.connectAndSend(
           printer.host,
           printer.port,
-          buffer,
+          printRows,
           PrinterBrand.EPSON,
           PrinterSeries.TM_M30
         );

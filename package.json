@@ -50,7 +50,9 @@
     "android"
   ],
   "dependencies": {
-    "react-native-esc-pos-printer": "^2.2.1"
+    "@tillpos/xml-escpos-helper": "^0.2.7",
+    "react-native-esc-pos-printer": "^2.2.1",
+    "react-native-star-io10": "^1.2.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
@@ -71,6 +73,7 @@
     "react": "^16.13.1",
     "react-native": "^0.63.2",
     "react-native-builder-bob": "^0.17.1",
+    "react-scripts": "4.0.3",
     "release-it": "^14.2.2",
     "rimraf": "^3.0.2",
     "ts-loader": "^2.3.4",
@@ -87,8 +90,7 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "yarn lint && yarn typescript"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "commitlint": {

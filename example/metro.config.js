@@ -4,6 +4,8 @@ const escape = require('escape-string-regexp');
 const pak = require('../package.json');
 
 const root = path.resolve(__dirname, '..');
+const packagePath = (packageName) =>
+  path.dirname(require.resolve(`${packageName}/package.json`));
 
 const modules = Object.keys({
   ...pak.peerDependencies,
@@ -23,10 +25,16 @@ module.exports = {
       )
     ),
 
-    extraNodeModules: modules.reduce((acc, name) => {
-      acc[name] = path.join(__dirname, 'node_modules', name);
-      return acc;
-    }, {}),
+    extraNodeModules: {
+      '@babel/runtime': packagePath('@babel/runtime'),
+      ...modules.reduce((acc, name) => {
+        acc[name] = path.join(__dirname, 'node_modules', name);
+        return acc;
+      }, {}),
+      'stream': require.resolve('readable-stream'),
+      'zlib': require.resolve('browserify-zlib'),
+      'fs': require.resolve('react-native-fs'),
+    },
   },
 
   transformer: {
