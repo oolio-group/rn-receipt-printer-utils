@@ -185,6 +185,10 @@ PODS:
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
   - React-jsinspector (0.63.2)
+  - react-native-esc-pos-printer (2.2.1):
+    - React-Core
+  - react-native-star-io10 (1.2.0):
+    - React
   - React-RCTActionSheet (0.63.2):
     - React-Core/RCTActionSheetHeaders (= 0.63.2)
   - React-RCTAnimation (0.63.2):
@@ -245,8 +249,12 @@ PODS:
     - React-Core (= 0.63.2)
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
-  - tillpos-rn-receipt-printer-utils (0.1.0):
+  - RNFS (2.16.6):
     - React
+  - tillpos-rn-receipt-printer-utils (0.2.19):
+    - React
+    - react-native-esc-pos-printer
+    - react-native-star-io10
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -267,6 +275,8 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-esc-pos-printer (from `../node_modules/react-native-esc-pos-printer`)
+  - react-native-star-io10 (from `../node_modules/react-native-star-io10`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -277,6 +287,7 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNFS (from `../node_modules/react-native-fs`)
   - tillpos-rn-receipt-printer-utils (from `../..`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -315,6 +326,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-esc-pos-printer:
+    :path: "../node_modules/react-native-esc-pos-printer"
+  react-native-star-io10:
+    :path: "../node_modules/react-native-star-io10"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -335,6 +350,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   tillpos-rn-receipt-printer-utils:
     :path: "../.."
   Yoga:
@@ -357,6 +374,8 @@ SPEC CHECKSUMS:
   React-jsi: 54245e1d5f4b690dec614a73a3795964eeef13a8
   React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
+  react-native-esc-pos-printer: 699b8f2c060c36f244bbc443449fec83a40bca09
+  react-native-star-io10: 21afc32e6319db95ae5b46af0b7e5546298f1f04
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
   React-RCTBlob: 39cf0ece1927996c4466510e25d2105f67010e13
@@ -367,9 +386,10 @@ SPEC CHECKSUMS:
   React-RCTText: 1b6773e776e4b33f90468c20fe3b16ca3e224bb8
   React-RCTVibration: 4d2e726957f4087449739b595f107c0d4b6c2d2d
   ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
-  tillpos-rn-receipt-printer-utils: dbc6561b334bc48c8d2b73163ea1bcec35178d68
+  RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
+  tillpos-rn-receipt-printer-utils: deb8e6f2eac4348ddef8742361906f64efa6017d
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
 
 PODFILE CHECKSUM: f48d21d8c903ca4bae3af77aec96d015293dce33
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.3
