@@ -12,9 +12,31 @@ interface Printer {
   device_name: string;
   host: string;
   port: number;
+  brand: PrinterBrand;
+  series?: PrinterSeries;
 }
+const divider = Array.from({ length: 42 }).fill('-').join('');
+const space = Array.from({ length: 32 }).fill(' ').join('');
 const PRINTERS: Array<Printer> = [
-  { device_name: 'P1', host: '10.15.0.101', port: 9100 },
+  {
+    device_name: 'P1',
+    host: '10.15.0.175',
+    port: 9100,
+    brand: PrinterBrand.STAR,
+  },
+  {
+    device_name: 'P2',
+    host: '10.15.0.101',
+    port: 9100,
+    brand: PrinterBrand.EPSON,
+  },
+  {
+    device_name: 'P3',
+    host: '10.15.0.196',
+    port: 9100,
+    brand: PrinterBrand.EPSON,
+    series: PrinterSeries.TM_U220,
+  },
 ];
 
 export default function App() {
@@ -35,6 +57,14 @@ export default function App() {
         width: 2,
         text: 'test \n',
         feedLine: true,
+      },
+      {
+        isBold: true,
+        alignment: RowAlignment.CENTER,
+        height: 0,
+        width: 0,
+        text: divider + '\n',
+        feedLine: false,
       },
       {
         isBold: false,
@@ -76,18 +106,32 @@ export default function App() {
         text: 'test \n',
         feedLine: true,
       },
+      {
+        isBold: true,
+        alignment: RowAlignment.CENTER,
+        height: 0,
+        width: 0,
+        text: divider + '\n',
+        feedLine: false,
+      },
+      {
+        isBold: true,
+        alignment: RowAlignment.CENTER,
+        height: 0,
+        width: 0,
+        text: 'Total' + space + '69.69\n',
+        feedLine: false,
+      },
     ];
-    for (let i = 0; i < 1; i++) {
-      let spont: number = Math.floor(Math.random() * PRINTERS.length);
-      const printer = PRINTERS[spont];
+    for (var printer of PRINTERS) {
       try {
         console.log('sending data to;' + printer.host);
         await NetPrinter.connectAndSend(
           printer.host,
           printer.port,
           printRows,
-          PrinterBrand.EPSON,
-          PrinterSeries.TM_M30
+          printer.brand,
+          printer.series || PrinterSeries.TM_M30
         );
       } catch (err) {
         console.log('error', err);

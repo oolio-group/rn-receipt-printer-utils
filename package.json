@@ -144,6 +144,9 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-star-io10":"*",
+    "react-native-esc-pos-printer":"*"
+
   }
 }

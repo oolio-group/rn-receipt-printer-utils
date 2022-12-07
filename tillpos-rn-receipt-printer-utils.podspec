@@ -20,4 +20,5 @@ Pod::Spec.new do |s|
 
   s.dependency 'React'
   s.dependency 'react-native-esc-pos-printer'
+  s.dependency 'react-native-star-io10'
 end
