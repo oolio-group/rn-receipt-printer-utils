@@ -124,6 +124,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				929AC738BA57C3E4D5D8B112 /* [CP] Copy Pods Resources */,
+				2DBB992C130D2C60BA65DAF1 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -194,6 +195,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		2DBB992C130D2C60BA65DAF1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ThermalReceiptPrinterExample/Pods-ThermalReceiptPrinterExample-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/react-native-star-io10/StarIO10.framework/StarIO10",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StarIO10.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ThermalReceiptPrinterExample/Pods-ThermalReceiptPrinterExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		929AC738BA57C3E4D5D8B112 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

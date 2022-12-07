@@ -16,6 +16,7 @@
     "react-native": "0.63.2",
     "react-native-esc-pos-printer": "^2.2.1",
     "react-native-fs": "2.16.6",
+    "react-native-star-io10": "^1.2.0",
     "readable-stream": "3.6.0",
     "util": "^0.12.5"
   },

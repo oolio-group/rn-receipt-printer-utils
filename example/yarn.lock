@@ -3642,6 +3642,11 @@ react-native-fs@2.16.6:
     base-64 "^0.1.0"
     utf8 "^3.0.0"
 
+react-native-star-io10@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-star-io10/-/react-native-star-io10-1.2.0.tgz#c44ada0547abb26f9d9672ff400f5059e9b9a7c2"
+  integrity sha512-SYlKcRtK7j0wcmoaryvuMUJjAslDNFXbwNFqsJhDaOV0HaMLErTAsmDUc/+rlP4vkAWvfdKdFf5cgTmqs+n5Ow==
+
 react-native@0.63.2:
   version "0.63.2"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.63.2.tgz#eaebf3430577b37fbd66ef228a86b3408259ef8e"
