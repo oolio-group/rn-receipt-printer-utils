@@ -1,26 +1,13 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@tillpos/rn-receipt-printer-utils": ["./src/index"]
-    },
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "jsx": "react",
-    "lib": ["esnext"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noImplicitUseStrict": false,
-    "noStrictGenericChecks": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "esnext"
-  }
+    "declaration": true,
+    "esModuleInterop": true,
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "skipLibCheck": true
+  },
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "lib"]
 }

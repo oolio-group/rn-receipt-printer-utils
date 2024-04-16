@@ -2,8 +2,7 @@
   "name": "@tillpos/rn-receipt-printer-utils",
   "version": "0.2.18",
   "description": "Fork of react-native-printer. A React Native Library to support USB/BLE/Net printer",
-  "main": "lib/commonjs/index",
-  "module": "lib/module/index",
+  "main": "lib/index",
   "types": "lib/typescript/index.d.ts",
   "author": "Till",
   "homepage": "https://github.com/hitz-group/rn-receipt-printer-utils.git",
@@ -12,11 +11,12 @@
   "scripts": {
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build",
+    "prepare": "yarn compile",
     "release": "release-it",
     "example": "yarn --cwd example",
     "pods": "cd example && pod-install --quiet",
-    "bootstrap": "yarn example && yarn && yarn pods"
+    "bootstrap": "yarn example && yarn && yarn pods",
+    "compile": "tsc -p ./tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -68,7 +68,6 @@
     "react": "17.0.2",
     "react-native": "0.66.5",
     "react-native-esc-pos-printer": "^3.1.0",
-    "react-native-builder-bob": "^0.23.2",
     "release-it": "^14.2.2",
     "rimraf": "^3.0.2",
     "ts-loader": "^2.3.4",
@@ -123,20 +122,6 @@
     "tabWidth": 2,
     "trailingComma": "es5",
     "useTabs": false
-  },
-  "react-native-builder-bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      "commonjs",
-      "module",
-      [
-        "typescript",
-        {
-          "project": "tsconfig.build.json"
-        }
-      ]
-    ]
   },
   "peerDependencies": {
     "react": "*",
