@@ -5156,15 +5156,6 @@ fs-extra@^1.0.0:
     jsonfile "^2.1.0"
     klaw "^1.0.0"
 
-fs-extra@^10.0.1:
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.1.0.tgz#02873cfbc4084dde127eaa5f9905eef2325d1abf"
-  integrity sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==
-  dependencies:
-    graceful-fs "^4.2.0"
-    jsonfile "^6.0.1"
-    universalify "^2.0.0"
-
 fs-extra@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
@@ -8630,20 +8621,19 @@ react-native-builder-bob@^0.17.1:
   optionalDependencies:
     jetifier "^1.6.6"
 
-react-native-esc-pos-printer-sdk@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer-sdk/-/react-native-esc-pos-printer-sdk-1.1.0.tgz#b32e4b0651b18a11e681dba8c996809cc584031f"
-  integrity sha512-yVwkLtl269naytw5AaVjxIVSzRJ3YYnlefyKVsdR7GLkPl8+jDgdxsJq2P6eAEv8PAcR3WVSg/b2kNtoWEkh5w==
+react-native-esc-pos-printer-sdk@2.27.1:
+  version "2.27.1"
+  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer-sdk/-/react-native-esc-pos-printer-sdk-2.27.1.tgz#afae825a945e5e52f5b90d8e2ac78f8a1751b5d3"
+  integrity sha512-utmnZgVUavl1SlwG0yxc8a8uBUXntCKGuDjAG3p6Lp1oLvfrUTncB3a9Cei/EXU0UXN1AAwmL8U6i2/pUnWeiA==
 
-react-native-esc-pos-printer@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer/-/react-native-esc-pos-printer-2.2.1.tgz#a8ed922397018259b88a42a224bcb5c921dd9a69"
-  integrity sha512-Rtp39SMSQVKsJ0hRVlswfiQ1QP1U8KSZqmbU6qLP+gJ9/ltFqeO0kyl8PmtaZScyHVwst1Mg6dX7CSauXJ1Cog==
+react-native-esc-pos-printer@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer/-/react-native-esc-pos-printer-3.1.0.tgz#420290ea1495f5e685de9f040fd1e1855cd719a9"
+  integrity sha512-RXZoOwoUDLo1pJfvfsHlzifTqdSlMiuNbPnUK1nqApnCxC7VwM0BRKw1ZOoxjackA/4CgluiFK9Tfoudjs5GwA==
   dependencies:
     buffer "6.0.3"
-    fs-extra "^10.0.1"
-    react-native-esc-pos-printer-sdk "^1.1.0"
-    word-wrap "^1.2.3"
+    react-native-esc-pos-printer-sdk "2.27.1"
+    wordwrapjs "^5.1.0"
 
 react-native@^0.63.2:
   version "0.63.4"
@@ -10509,6 +10499,11 @@ wordwrap@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=
+
+wordwrapjs@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/wordwrapjs/-/wordwrapjs-5.1.0.tgz#4c4d20446dcc670b14fa115ef4f8fd9947af2b3a"
+  integrity sha512-JNjcULU2e4KJwUNv6CHgI46UvDGitb6dGryHajXTDiLgg1/RiGoPSDw4kZfYnwGtEXf2ZMeIewDQgFGzkCB2Sg==
 
 wrap-ansi@^5.1.0:
   version "5.1.0"
