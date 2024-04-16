@@ -49,9 +49,6 @@
     "rn",
     "android"
   ],
-  "dependencies": {
-    "react-native-esc-pos-printer": "3.1.0"
-  },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
     "@react-native-community/eslint-config": "^2.0.0",
@@ -70,6 +67,7 @@
     "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-native": "^0.63.2",
+    "react-native-esc-pos-printer": "^3.1.0",
     "react-native-builder-bob": "^0.17.1",
     "release-it": "^14.2.2",
     "rimraf": "^3.0.2",
@@ -142,6 +140,7 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-esc-pos-printer": "^3.1.0"
   }
 }

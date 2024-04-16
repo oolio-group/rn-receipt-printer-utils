@@ -8626,7 +8626,7 @@ react-native-esc-pos-printer-sdk@2.27.1:
   resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer-sdk/-/react-native-esc-pos-printer-sdk-2.27.1.tgz#afae825a945e5e52f5b90d8e2ac78f8a1751b5d3"
   integrity sha512-utmnZgVUavl1SlwG0yxc8a8uBUXntCKGuDjAG3p6Lp1oLvfrUTncB3a9Cei/EXU0UXN1AAwmL8U6i2/pUnWeiA==
 
-react-native-esc-pos-printer@3.1.0:
+react-native-esc-pos-printer@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer/-/react-native-esc-pos-printer-3.1.0.tgz#420290ea1495f5e685de9f040fd1e1855cd719a9"
   integrity sha512-RXZoOwoUDLo1pJfvfsHlzifTqdSlMiuNbPnUK1nqApnCxC7VwM0BRKw1ZOoxjackA/4CgluiFK9Tfoudjs5GwA==
