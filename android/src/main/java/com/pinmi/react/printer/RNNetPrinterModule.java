@@ -59,11 +59,13 @@ public class RNNetPrinterModule extends ReactContextBaseJavaModule implements RN
 
     @ReactMethod
     public void connectAndSend(String host, Integer port, String data, String brand,String series, Callback successCallback, Callback errorCallback) {
-        this.adapter = NetPrinterAdapter.getInstance();
-        this.adapter.init(reactContext,  null, null);
+      new Thread(() -> {
+        adapter = NetPrinterAdapter.getInstance();
+        adapter.init(reactContext,  null, null);
 
         adapter.connectAndSend(host, port, data, successCallback, errorCallback);
-        this.adapter.closeConnectionIfExists();
+        adapter.closeConnectionIfExists();
+      }).start();
     }
 
     @ReactMethod
