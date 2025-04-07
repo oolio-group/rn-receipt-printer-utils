@@ -50,7 +50,7 @@
     "android"
   ],
   "dependencies": {
-    "react-native-esc-pos-printer": "4.4.1"
+    "react-native-esc-pos-printer": "4.1.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
