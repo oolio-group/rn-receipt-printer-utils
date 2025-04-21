@@ -4729,6 +4729,11 @@ eventemitter3@^3.0.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
   integrity sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==
 
+eventemitter3@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-5.0.1.tgz#53f5ffd0a492ac800721bb42c66b841de96423c4"
+  integrity sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==
+
 exec-sh@^0.3.2:
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.3.4.tgz#3a018ceb526cc6f6df2bb504b2bfe8e3a4934ec5"
@@ -5155,15 +5160,6 @@ fs-extra@^1.0.0:
     graceful-fs "^4.1.2"
     jsonfile "^2.1.0"
     klaw "^1.0.0"
-
-fs-extra@^10.0.1:
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.1.0.tgz#02873cfbc4084dde127eaa5f9905eef2325d1abf"
-  integrity sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==
-  dependencies:
-    graceful-fs "^4.2.0"
-    jsonfile "^6.0.1"
-    universalify "^2.0.0"
 
 fs-extra@^8.1.0:
   version "8.1.0"
@@ -8124,6 +8120,19 @@ p-map@^4.0.0:
   dependencies:
     aggregate-error "^3.0.0"
 
+p-queue@^7.4.1:
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/p-queue/-/p-queue-7.4.1.tgz#7f86f853048beca8272abdbb7cec1ed2afc0f265"
+  integrity sha512-vRpMXmIkYF2/1hLBKisKeVYJZ8S2tZ0zEAmIJgdVKP2nq0nh4qCdf8bgw+ZgKrkh71AOCaqzwbJJk1WtdcF3VA==
+  dependencies:
+    eventemitter3 "^5.0.1"
+    p-timeout "^5.0.2"
+
+p-timeout@^5.0.2:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/p-timeout/-/p-timeout-5.1.0.tgz#b3c691cf4415138ce2d9cfe071dba11f0fee085b"
+  integrity sha512-auFDyzzzGZZZdHz3BtET9VEz0SE/uMEAx7uWfGPucfzEwwe/xH0iVeZibQmANYE/hp9T2+UUZT5m+BKyrDp3Ew==
+
 p-try@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-1.0.0.tgz#cbc79cdbaf8fd4228e13f621f2b1a237c1b207b3"
@@ -8630,20 +8639,20 @@ react-native-builder-bob@^0.17.1:
   optionalDependencies:
     jetifier "^1.6.6"
 
-react-native-esc-pos-printer-sdk@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer-sdk/-/react-native-esc-pos-printer-sdk-1.1.0.tgz#b32e4b0651b18a11e681dba8c996809cc584031f"
-  integrity sha512-yVwkLtl269naytw5AaVjxIVSzRJ3YYnlefyKVsdR7GLkPl8+jDgdxsJq2P6eAEv8PAcR3WVSg/b2kNtoWEkh5w==
+react-native-esc-pos-printer-sdk@2.27.1:
+  version "2.27.1"
+  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer-sdk/-/react-native-esc-pos-printer-sdk-2.27.1.tgz#afae825a945e5e52f5b90d8e2ac78f8a1751b5d3"
+  integrity sha512-utmnZgVUavl1SlwG0yxc8a8uBUXntCKGuDjAG3p6Lp1oLvfrUTncB3a9Cei/EXU0UXN1AAwmL8U6i2/pUnWeiA==
 
-react-native-esc-pos-printer@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer/-/react-native-esc-pos-printer-2.2.1.tgz#a8ed922397018259b88a42a224bcb5c921dd9a69"
-  integrity sha512-Rtp39SMSQVKsJ0hRVlswfiQ1QP1U8KSZqmbU6qLP+gJ9/ltFqeO0kyl8PmtaZScyHVwst1Mg6dX7CSauXJ1Cog==
+react-native-esc-pos-printer@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer/-/react-native-esc-pos-printer-4.1.0.tgz#c79013a2017ff5c71f3e85ac2dfc3f066fe43433"
+  integrity sha512-bMX9uTmVuD04A5dx6FB9EH9kHBvToMaUAlWGnkBvc2DxTom90GDG+NarSmHPrNX9C8N0k8Z8+4s4SgrKhjjMfw==
   dependencies:
     buffer "6.0.3"
-    fs-extra "^10.0.1"
-    react-native-esc-pos-printer-sdk "^1.1.0"
-    word-wrap "^1.2.3"
+    p-queue "^7.4.1"
+    react-native-esc-pos-printer-sdk "2.27.1"
+    wordwrapjs "^5.1.0"
 
 react-native@^0.63.2:
   version "0.63.4"
@@ -10509,6 +10518,11 @@ wordwrap@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=
+
+wordwrapjs@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/wordwrapjs/-/wordwrapjs-5.1.0.tgz#4c4d20446dcc670b14fa115ef4f8fd9947af2b3a"
+  integrity sha512-JNjcULU2e4KJwUNv6CHgI46UvDGitb6dGryHajXTDiLgg1/RiGoPSDw4kZfYnwGtEXf2ZMeIewDQgFGzkCB2Sg==
 
 wrap-ansi@^5.1.0:
   version "5.1.0"
