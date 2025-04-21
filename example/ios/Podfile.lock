@@ -247,7 +247,7 @@ PODS:
     - React-Core (= 0.63.2)
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
-  - tillpos-rn-receipt-printer-utils (0.3.1):
+  - tillpos-rn-receipt-printer-utils (1.0.0):
     - React
     - react-native-esc-pos-printer
   - Yoga (1.14.0)
@@ -374,7 +374,7 @@ SPEC CHECKSUMS:
   React-RCTText: 1b6773e776e4b33f90468c20fe3b16ca3e224bb8
   React-RCTVibration: 4d2e726957f4087449739b595f107c0d4b6c2d2d
   ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
-  tillpos-rn-receipt-printer-utils: ea86cb7efb52b1a2eddb0b468036a715d9e45174
+  tillpos-rn-receipt-printer-utils: 40cebf77b58615a8b940647c4c06390691ebd2ec
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
 
 PODFILE CHECKSUM: f48d21d8c903ca4bae3af77aec96d015293dce33
