@@ -8644,10 +8644,10 @@ react-native-esc-pos-printer-sdk@2.27.1:
   resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer-sdk/-/react-native-esc-pos-printer-sdk-2.27.1.tgz#afae825a945e5e52f5b90d8e2ac78f8a1751b5d3"
   integrity sha512-utmnZgVUavl1SlwG0yxc8a8uBUXntCKGuDjAG3p6Lp1oLvfrUTncB3a9Cei/EXU0UXN1AAwmL8U6i2/pUnWeiA==
 
-react-native-esc-pos-printer@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer/-/react-native-esc-pos-printer-4.1.0.tgz#c79013a2017ff5c71f3e85ac2dfc3f066fe43433"
-  integrity sha512-bMX9uTmVuD04A5dx6FB9EH9kHBvToMaUAlWGnkBvc2DxTom90GDG+NarSmHPrNX9C8N0k8Z8+4s4SgrKhjjMfw==
+react-native-esc-pos-printer@4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer/-/react-native-esc-pos-printer-4.1.4.tgz#b3adfad15fd534d2c46fecdcba4de432d27422da"
+  integrity sha512-G0ohDF2QTEuGqa1ardB8KT2/U82MJ9JOvHVumjP6dLz1/RWnW5BmdAiHBFmQwZu+IYwipVXXJsWRKhvu16k98Q==
   dependencies:
     buffer "6.0.3"
     p-queue "^7.4.1"
