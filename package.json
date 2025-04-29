@@ -50,7 +50,7 @@
     "android"
   ],
   "dependencies": {
-    "react-native-esc-pos-printer": "https://github.com/oolio-group/react-native-esc-pos-printer.git#ios-sdk/2.2.1"
+    "react-native-esc-pos-printer": "https://github.com/oolio-group/react-native-esc-pos-printer#ios-sdk/2.2.1"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
