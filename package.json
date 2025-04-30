@@ -1,6 +1,6 @@
 {
   "name": "@tillpos/rn-receipt-printer-utils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fork of react-native-printer. A React Native Library to support USB/BLE/Net printer",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -50,7 +50,7 @@
     "android"
   ],
   "dependencies": {
-    "react-native-esc-pos-printer": "4.1.4"
+    "react-native-esc-pos-printer": "https://github.com/oolio-group/react-native-esc-pos-printer#v2.2.2"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
