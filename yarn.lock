@@ -2155,6 +2155,16 @@
   dependencies:
     "@octokit/openapi-types" "^5.3.1"
 
+"@oolio-group/react-native-esc-pos-printer@2.2.1":
+  version "2.2.1"
+  resolved "https://npm.pkg.github.com/download/@oolio-group/react-native-esc-pos-printer/2.2.1/de61fe294bceb6d4b06928285d7572914bd5f177#de61fe294bceb6d4b06928285d7572914bd5f177"
+  integrity sha512-CpeAsJUA1MiGyEF9DkYvE74UTftthfiGy5bvVWRNFz3kvudL+KFGkkjge/ywvHuTs3/Bq4Lfv+9LThK6i73YZA==
+  dependencies:
+    buffer "6.0.3"
+    fs-extra "^10.0.1"
+    react-native-esc-pos-printer-sdk "^1.1.0"
+    word-wrap "^1.2.3"
+
 "@react-native-community/cli-debugger-ui@^4.13.1":
   version "4.13.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-4.13.1.tgz#07de6d4dab80ec49231de1f1fbf658b4ad39b32c"
@@ -8634,15 +8644,6 @@ react-native-esc-pos-printer-sdk@^1.1.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer-sdk/-/react-native-esc-pos-printer-sdk-1.2.1.tgz#68458b4f9f575264cd03c202160bfa7a62e5476a"
   integrity sha512-mAHSH/qMKXD5SNfiywGUEKbIGJB5RjythWFxIa1pPu/BKkmI9zEZzJMjT1/hUVu7nksS/hebuS0am/Lt3bcUfQ==
-
-"react-native-esc-pos-printer@https://github.com/oolio-group/react-native-esc-pos-printer#v2.2.2":
-  version "2.2.1"
-  resolved "https://github.com/oolio-group/react-native-esc-pos-printer#bb056d82a92e0b1e795e1db7558339f6e92bd7da"
-  dependencies:
-    buffer "6.0.3"
-    fs-extra "^10.0.1"
-    react-native-esc-pos-printer-sdk "^1.1.0"
-    word-wrap "^1.2.3"
 
 react-native@^0.63.2:
   version "0.63.4"

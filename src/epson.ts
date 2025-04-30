@@ -1,6 +1,6 @@
 import EscPosPrinter, {
   getPrinterSeriesByName,
-} from 'react-native-esc-pos-printer';
+} from '@oolio-group/react-native-esc-pos-printer';
 import { PrinterSeries } from '.';
 
 var isExecuting = false;

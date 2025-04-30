@@ -1,1 +1,1 @@
-declare module 'react-native-esc-pos-printer';
+declare module '@oolio-group/react-native-esc-pos-printer';

@@ -767,6 +767,16 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
+"@oolio-group/react-native-esc-pos-printer@2.2.1":
+  version "2.2.1"
+  resolved "https://npm.pkg.github.com/download/@oolio-group/react-native-esc-pos-printer/2.2.1/de61fe294bceb6d4b06928285d7572914bd5f177#de61fe294bceb6d4b06928285d7572914bd5f177"
+  integrity sha512-CpeAsJUA1MiGyEF9DkYvE74UTftthfiGy5bvVWRNFz3kvudL+KFGkkjge/ywvHuTs3/Bq4Lfv+9LThK6i73YZA==
+  dependencies:
+    buffer "6.0.3"
+    fs-extra "^10.0.1"
+    react-native-esc-pos-printer-sdk "^1.1.0"
+    word-wrap "^1.2.3"
+
 "@react-native-community/cli-debugger-ui@^4.9.0":
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-4.9.0.tgz#4177764ba69243c97aa26829d59d9501acb2bd71"
@@ -3470,16 +3480,6 @@ react-native-esc-pos-printer-sdk@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer-sdk/-/react-native-esc-pos-printer-sdk-1.1.0.tgz#b32e4b0651b18a11e681dba8c996809cc584031f"
   integrity sha512-yVwkLtl269naytw5AaVjxIVSzRJ3YYnlefyKVsdR7GLkPl8+jDgdxsJq2P6eAEv8PAcR3WVSg/b2kNtoWEkh5w==
-
-react-native-esc-pos-printer@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-esc-pos-printer/-/react-native-esc-pos-printer-2.2.1.tgz#a8ed922397018259b88a42a224bcb5c921dd9a69"
-  integrity sha512-Rtp39SMSQVKsJ0hRVlswfiQ1QP1U8KSZqmbU6qLP+gJ9/ltFqeO0kyl8PmtaZScyHVwst1Mg6dX7CSauXJ1Cog==
-  dependencies:
-    buffer "6.0.3"
-    fs-extra "^10.0.1"
-    react-native-esc-pos-printer-sdk "^1.1.0"
-    word-wrap "^1.2.3"
 
 react-native@0.63.2:
   version "0.63.2"
