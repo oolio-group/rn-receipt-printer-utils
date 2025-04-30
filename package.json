@@ -9,6 +9,9 @@
   "homepage": "https://github.com/hitz-group/rn-receipt-printer-utils.git",
   "react-native": "src/index",
   "source": "src/index",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",

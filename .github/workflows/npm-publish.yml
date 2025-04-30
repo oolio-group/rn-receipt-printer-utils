@@ -18,7 +18,7 @@ jobs:
     - name: Clean Yarn cache
       run: |
         yarn cache clean
-        rm -rf node_modules yarn.lock
+        rm -rf node_modules
     - name: Install Node Dependencies
       run: yarn install --no-cache --network-concurrency 1
     - name: Build packages
