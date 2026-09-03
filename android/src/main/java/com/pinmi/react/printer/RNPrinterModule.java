@@ -9,6 +9,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.pinmi.react.printer.adapter.PrinterAdapter;
@@ -35,7 +36,7 @@ public interface RNPrinterModule {
     public void printRawData(String base64Data, Callback errorCallback) ;
 
     @ReactMethod
-    public void printByteData(byte[] base64Data, Callback errorCallback) ;
+    public void printByteData(ReadableArray base64Data, Callback errorCallback) ;
 
 }
 

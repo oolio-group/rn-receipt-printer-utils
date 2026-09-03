@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import java.util.ArrayList;
@@ -221,7 +222,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
     }
 
     @Override
-    public void printByteData(byte[] rawBase64Data, Callback errorCallback) {
+    public void printByteData(ReadableArray rawBase64Data, Callback errorCallback) {
     }
 
     @Override

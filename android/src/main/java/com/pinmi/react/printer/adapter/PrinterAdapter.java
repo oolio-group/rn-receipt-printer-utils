@@ -6,6 +6,7 @@ import android.telecom.Call;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface PrinterAdapter {
 
     public void printRawData(String rawBase64Data, Callback errorCallback);
 
-    public void printByteData(byte[] rawBase64Data, Callback errorCallback);
+    public void printByteData(ReadableArray rawBase64Data, Callback errorCallback);
 
     public void connectAndSend(String host, Integer port, String rawBase64Data, Callback successCallback, Callback errorCallback);
 
