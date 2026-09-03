@@ -8,6 +8,7 @@ import android.util.Log;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -220,7 +221,7 @@ public class NetPrinterAdapter implements PrinterAdapter {
     }
 
     @Override
-    public void printByteData(byte[] rawBase64Data, Callback errorCallback) {
+    public void printByteData(ReadableArray rawBase64Data, Callback errorCallback) {
         if (this.mSocket == null) {
             errorCallback.invoke("bluetooth connection is not built, may be you forgot to connectPrinter");
             return;
@@ -228,9 +229,11 @@ public class NetPrinterAdapter implements PrinterAdapter {
 
         Log.v(LOG_TAG, "bello :: int start to print raw data ");
 
-        final byte[] rawData = rawBase64Data;
+        final byte[] rawData = new byte[rawBase64Data.size()];
+        for (int i = 0; i < rawBase64Data.size(); i++) {
+            rawData[i] = (byte) rawBase64Data.getInt(i);
+        }
         final Socket socket = this.mSocket;
-        String str = new String(rawBase64Data);
 
         new Thread(new Runnable() {
             @Override

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -173,7 +174,7 @@ public class BLEPrinterAdapter implements PrinterAdapter{
     }
 
     @Override
-    public void printByteData(byte[] rawBase64Data, Callback errorCallback) {
+    public void printByteData(ReadableArray rawBase64Data, Callback errorCallback) {
     }
     
     @Override
