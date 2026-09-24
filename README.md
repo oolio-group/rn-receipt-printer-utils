@@ -6,10 +6,20 @@ A React Native Library to connect to thermal printer over network and to send th
 
 ![Node.js Package](https://github.com/HeligPfleigh/react-native-thermal-receipt-printer/workflows/Node.js%20Package/badge.svg)
 
+## Compatibility
+
+- **React Native 0.75+** ✅
+- **React 18.x** ✅
+- **iOS 12.4+** ✅
+- **Android API 23+** ✅
+- **Autolinking** ✅
+- **New Architecture (Fabric/TurboModules)** ✅
+- **Hermes** ✅
+
 ## Installation
 
 ```
-yarn add @tillpos/rn-receipt-printer-utils
+bun add @tillpos/rn-receipt-printer-utils
 ```
 
 ## Troubleshoot
@@ -32,15 +42,14 @@ _Podfile_
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  # add_flipper_pods!
+  # :flipper_configuration => FlipperConfiguration.enabled,
   # post_install do |installer|
-  #   flipper_post_install(installer)
+  #   react_native_post_install(installer)
   # end
 ...
 ```
 
-and comment out code related to Flipper in `ios/AppDelegate.m`
-![ios/AppDelegate.m](./.github/flipper.png)
+and comment out code related to Flipper in `ios/AppDelegate.m` if issues persist
 
 
 ## Support
@@ -60,10 +69,10 @@ and comment out code related to Flipper in `ios/AppDelegate.m`
 
 ## Development workflow
 
-To get started with the project, run `yarn bootstrap` in the root directory to install the required dependencies for each package:
+To get started with the project, run `bun bootstrap` in the root directory to install the required dependencies for each package:
 
 ```sh
-yarn bootstrap
+bun bootstrap
 ```
 
 While developing, you can run the [example app](/example/) to test your changes.
@@ -71,25 +80,25 @@ While developing, you can run the [example app](/example/) to test your changes.
 To start the packager:
 
 ```sh
-yarn example start
+bun example start
 ```
 
 To run the example app on Android:
 
 ```sh
-yarn example android
+bun example android
 ```
 
 To run the example app on iOS:
 
 ```sh
-yarn example ios
+bun example ios
 ```
 
 To make build
 
 ```sh
-yarn prepare
+bun prepare
 ```
 
 ## Usage

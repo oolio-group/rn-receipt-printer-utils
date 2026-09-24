@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   s.authors      = package['author']
   s.homepage     = package['homepage']
-  s.platform     = :ios, "9.0"
+  s.platform     = :ios, "12.4"
 
   s.source       = { :git => "https://github.com/hitz-group/rn-receipt-printer-utils.git", :tag => "v#{s.version}" }
   s.source_files  = "ios/**/*.{h,m}"
@@ -18,6 +18,6 @@ Pod::Spec.new do |s|
   s.ios.vendored_libraries = "ios/PrinterSDK/libGenericPrinterSDK.a"
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => '"${PROJECT_DIR}/PrinterSDK"/**' }
 
-  s.dependency 'React'
+  s.dependency 'React-Core'
   s.dependency 'react-native-esc-pos-printer'
 end

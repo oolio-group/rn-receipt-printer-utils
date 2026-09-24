@@ -7,7 +7,6 @@
 #import <React/RCTBridgeModule.h>
 #import "utils/NSDataAdditions.h"
 
-@interface RNNetPrinter : NSObject <RCTBridgeModule>{
-}
+@interface RNNetPrinter : NSObject <RCTBridgeModule>
 
 @end
