@@ -1,5 +1,6 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { EpsonUtil } from './epson';
+import { StarUtil } from './star';
 
 const RNUSBPrinter = NativeModules.RNUSBPrinter;
 const RNBLEPrinter = NativeModules.RNBLEPrinter;
@@ -17,6 +18,12 @@ export enum PrinterSeries {
   TM_U220 = 'TM_U220',
   TM_T82 = 'TM_T82',
   TM_L90 = 'TM_L90',
+}
+
+export enum RowAlignment {
+  CENTER = 'center',
+  RIGHT = 'right',
+  LEFT = 'left',
 }
 export interface PrinterOptions {
   beep?: boolean;
@@ -43,6 +50,19 @@ export interface IBLEPrinter extends IBasePrinter {
 export interface INetPrinter extends IBasePrinter {
   host: string;
   port: number;
+}
+
+export interface PrintRow {
+  isBold: boolean;
+  alignment: RowAlignment;
+  height: number;
+  width: number;
+  text: string;
+  feedLine: boolean;
+}
+export interface PrinterUtil {
+  connectAndSend: (...args: any) => void;
+  constructBuffer: (...args: any) => Buffer;
 }
 
 // Timeout for returning response to client
@@ -91,7 +111,7 @@ export const USBPrinter = {
 export const BLEPrinter = {
   connectAndSend: (
     bdAddress: string,
-    data: Buffer,
+    data: PrintRow[],
     brand: PrinterBrand,
     series = PrinterSeries.TM_M30
   ): Promise<IBLEPrinter> => {
@@ -106,9 +126,19 @@ export const BLEPrinter = {
               (printer: IBLEPrinter) => resolve(printer),
               (error: Error) => reject(error)
             )
+          : brand === PrinterBrand.STAR
+          ? StarUtil.connectAndSend(
+              bdAddress,
+              data,
+              false,
+              (printer: IBLEPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
           : RNBLEPrinter.connectAndSend(
               bdAddress,
-              data.toString('base64'),
+              EpsonUtil.constructBuffer(data, PrinterSeries.TM_M30II).toString(
+                'base64'
+              ),
               brand,
               series,
               (printer: IBLEPrinter) => resolve(printer),
@@ -129,7 +159,7 @@ export const NetPrinter = {
   connectAndSend: (
     host: string,
     port: number,
-    data: Buffer,
+    data: PrintRow[],
     brand: PrinterBrand,
     series = PrinterSeries.TM_M30
   ): Promise<INetPrinter> => {
@@ -144,10 +174,20 @@ export const NetPrinter = {
               (printer: INetPrinter) => resolve(printer),
               (error: Error) => reject(error)
             )
+          : brand === PrinterBrand.STAR
+          ? StarUtil.connectAndSend(
+              host,
+              data,
+              true,
+              (printer: INetPrinter) => resolve(printer),
+              (error: Error) => reject(error)
+            )
           : RNNetPrinter.connectAndSend(
               host,
               port,
-              data.toString('base64'),
+              EpsonUtil.constructBuffer(data, PrinterSeries.TM_M30II).toString(
+                'base64'
+              ),
               brand,
               series,
               (printer: INetPrinter) => resolve(printer),
